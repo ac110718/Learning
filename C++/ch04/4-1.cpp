@@ -21,5 +21,5 @@ int main() {
     printf("B\n");
     const auto* t4 = new Tracer { "Dynamic variable" };
     printf("C\n");
-    delete t4;
-}
+    delete t4; //manually delete t4 pointer
+} // t3 gets destroyed here, as does t2 and t1.
