@@ -32,3 +32,5 @@ int main() {
     goat_rodeo();
     goat_rodeo();
 }
+
+//test synch
