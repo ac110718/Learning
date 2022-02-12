@@ -22,6 +22,10 @@ contract EthPriceOracle is Ownable {
   // Binance API. Essentially this is the oracle's own "callback" function to 
   // be used by the service to set the ethPrice within this contract.
 
+  // This callback in turn immediately links back to the caller's callback
+  // to set the ethprice in THAT contract. Notice there's no ethPrice variable
+  // within this contract. It immediately gets passed back to the caller contract
+
   function setLatestEthPrice(uint256 _ethPrice, address _callerAddress, uint256 _id) public onlyOwner {
     require(pendingRequests[_id], "This request is not in my pending list.");
     delete pendingRequests[_id];
