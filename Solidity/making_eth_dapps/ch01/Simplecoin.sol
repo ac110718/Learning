@@ -1,6 +1,9 @@
 pragma solidity ^ 0.4.0;
 
 contract SimpleCoin {
+
+    //everything public for demonstration purposes with no checks or constraints on msg.sender or negative balances
+    
     mapping (address => uint256) public coinBalance;
     
     constructor() public {
