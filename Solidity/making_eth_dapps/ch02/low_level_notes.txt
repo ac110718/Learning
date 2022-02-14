@@ -1,0 +1,61 @@
+Public / Private Keys
+* keys are used to encrypt and decrypt data. 
+* private keys are generated from random number, and public key is generated specifically from that private key
+* public key used to encrypt messages that only private key can decrypt, and 
+* private key can encrypt messages that only public key can decrypt
+
+Encryption steps
+* Send a plaintext message.. along with a "signature," which is a signed version of this plaintext message. 
+* Signature = hash of message, encrypted by the private key.
+* recipient will hash the message.. and COMPARE to the DECODED signature, decoded using the public key.. 
+* The message hash and decoded signature should be equal.. otherwise the message was changed or wrong private key
+* Note: encrypting using public key is used for private communication via web where only the reader (with private key) will be doing the decoding, but not used in bitcoin
+
+Commit / Reveal Scheme
+* provide a hash of original information to the recipient
+* to unlock transferred assets, the other sender (provider of hash) must now provide the original information (key)
+* so that the hash of the original information (key) matches the hash. The counterparty now has full information to execute contract / withdrawal
+
+
+Ethereum nodes
+* The ethereum client has four main elements
+- EVM to execute EVM bytecode (compiled by Solidity contracts)
+- Memory pool, where the node stores transactions received, before it propagates further into network
+- Client process, which schedules EVM execution, handles incoming tx / messages (and storing to mempool). Appends new blocks received
+- JSON-RPC API, interface which exposes client functionality to other nodes and users
+
+Fullnode lifecycle
+1. User calls smart contract function through JSON-RPC2. 
+2. tx placed into memory pool
+3. tx executed on EVM for validation
+4. If validation on EVM successful, broadcast to peer nodes
+
+Mining Node lifecycle
+1. received tx from peer nodes, place into memory pool
+2. pick (profitable) tx
+3. Execute tx on EVM to validate
+4. Place on new block
+5. If block is successfully created, remove tx from memory pool
+6. Broadcast new block to peer nodes
+7. Full nodes receive new blocks from peers
+8. Full node executes all block transactions on EVM for validation
+9. Remove these transactions from memory pool
+10. Broadcast block to peer nodes
+
+When you deploy a contract... a developer writes a smart contract in solidity and compiles it into EVM bytecode..
+This is inserted into a contract deployment transaction.. and pushed to a local ethereum node, where it is executed and propagated throughout the network until mined and appended to blockchain
+
+Blockchain
+* each block's header contains a hash of the previous block (making the chain immutable through sequential dependence)
+* the block hash is a hash of all the information in the block, including all the transactions
+* proof of work: find a nonce (which can be any variable number) such that the block hash has a specific number of leading zeros (such a nonce can be found only through brute force trial error)
+* proof of stake: nodes in validator pool put staked ETH on the line and vote on the validity of the blocks. If misbehave, eth is burned. Otherwise you get the fees. Validators are chosen at random
+* header also contains the merkle root, which are used to verify integrity of transactions in blocks.. 
+* and more specifically allows for "lighter" forms of synchronization (starting points rather than recreating the entire chain from scratch)
+
+Merkle Trees
+* lay out all the transactions as leaves.. and "zip" them upwards with hashes of each descendent node until you get the root
+* can verify presence of tx by having the block header provide minimal information: root + min partial tree + tx
+* validator replicates the STRUCTURE of the tree.. lays out the partial tree (which contains min number of relevant nodes indicating the "path" that contains relevant tx to test)
+* if tx is part of the partial tree, validator knows that tx is in the block
+* ethereum has three merkle-patricia trie.. for 1. transactions, 2. receipts (return values of the tx), and 3. state (of global blockchain)
