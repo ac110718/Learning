@@ -4,6 +4,7 @@ import "./ReleasableSimpleCoin.sol";
 import "./Ownable.sol";
 import "./Pausable.sol";
 import "./Destructible.sol";
+import "./FundingLimitStrategy.sol";
 
 //inherit onlyOwner modifier
 contract SimpleCrowdSale is Pausable, Destructible {
@@ -20,6 +21,7 @@ contract SimpleCrowdSale is Pausable, Destructible {
     bool public isRefundingAllowed;
 
     ReleasableSimpleCoin public crowdsaleToken;
+    FundingLimitStrategy internal fundingLimitStrategy;
 
     constructor(uint256 _startTime, uint _endTime, uint256 _weiTokenPrice, uint256 _weiInvestmentObjective) payable public {
         require(_startTime >= now);
@@ -34,6 +36,8 @@ contract SimpleCrowdSale is Pausable, Destructible {
 
         crowdsaleToken = new ReleasableSimpleCoin(0);
         isFinalized = false;
+        fundingLimitStrategy = createFundingLimitStrategy();
+
     }
 
     event LogInvestment(address indexed investor, uint256 value);
@@ -53,7 +57,7 @@ contract SimpleCrowdSale is Pausable, Destructible {
     function isValidInvestment(uint256 _investment) internal view returns (bool) {
         bool nonZeroInvestment = _investment != 0;
         bool withinCrowdsalePeriod = now >= startTime && now <= endTime;
-        return nonZeroInvestment && withinCrowdsalePeriod;
+        return nonZeroInvestment && withinCrowdsalePeriod && fundingLimitStrategy.isFullInvestmentWithinLimit(_investment, investmentReceived);
     }
 
     function assignTokens(address _beneficiary, uint256 _investment) internal {
@@ -61,9 +65,12 @@ contract SimpleCrowdSale is Pausable, Destructible {
         crowdsaleToken.mint(_beneficiary, _numberOfTokens);
     }
 
+    //abstract method to be implemented via pricing strategy
     function calculateNumberOfTokens(uint256 _investment) internal returns (uint256) {
-        return _investment / weiTokenPrice;
     }
+
+    //abstract method to be implemented via funding limit strategy
+    function createFundingLimitStrategy() internal returns (FundingLimitStrategy);
 
     function finalize() onlyOwner public {
         if (isFinalized) revert();
