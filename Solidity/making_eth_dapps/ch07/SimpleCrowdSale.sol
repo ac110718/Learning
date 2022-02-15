@@ -6,6 +6,13 @@ import "./Pausable.sol";
 import "./Destructible.sol";
 import "./FundingLimitStrategy.sol";
 
+//allow token substitution
+interface ReleasableToken {
+    function mint(address _beneficiary, uint256 _numberOfTokens) external;
+    function release() external;
+    function transfer(address _to, uint256 _amount) external;
+}
+
 //inherit onlyOwner modifier
 contract SimpleCrowdSale is Pausable, Destructible {
     uint256 public startTime;
@@ -20,7 +27,7 @@ contract SimpleCrowdSale is Pausable, Destructible {
     bool public isFinalized;
     bool public isRefundingAllowed;
 
-    ReleasableSimpleCoin public crowdsaleToken;
+    ReleasableToken public crowdsaleToken;
     FundingLimitStrategy internal fundingLimitStrategy;
 
     constructor(uint256 _startTime, uint _endTime, uint256 _weiTokenPrice, uint256 _weiInvestmentObjective) payable public {
@@ -34,7 +41,7 @@ contract SimpleCrowdSale is Pausable, Destructible {
         weiTokenPrice = _weiTokenPrice;
         weiInvestmentObjective = _weiInvestmentObjective;
 
-        crowdsaleToken = new ReleasableSimpleCoin(0);
+        crowdsaleToken = createToken(); // indirection to allow override
         isFinalized = false;
         fundingLimitStrategy = createFundingLimitStrategy();
 
@@ -43,6 +50,11 @@ contract SimpleCrowdSale is Pausable, Destructible {
     event LogInvestment(address indexed investor, uint256 value);
     event LogTokenAssignment(address indexed investor, uint256 numTokens);
     event Refund(address investor, uint256 value);
+
+    // this function can be overriden to replace SimpleCoin with any other Token that implements ReleasableToken interface
+    function createToken() internal returns (ReleasableToken) {
+        return new ReleasableSimpleCoin(0);
+    }
 
     function invest() public payable {
         require(isValidInvestment(msg.value));
