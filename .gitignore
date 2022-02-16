@@ -1,9 +1,0 @@
-node_modules
-bower_components
-.cache/
-dist
-.env
-.DS_Store
-coverage
-.vscode/
-.parcel-cache
