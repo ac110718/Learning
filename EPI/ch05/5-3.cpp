@@ -43,7 +43,25 @@ double BuyAndSellStockOnce(const vector<double>& prices) {
 //for buy and sell twice.. you pick the running max going both ways and choose the biggest adjacent pair within a list that tracks max profit
 //on first and second sale, respectively
 
-double BuyAndSellStockTwice(const vector<double>& prices)
+double BuyAndSellStockTwice(const vector<double>& prices) {
+    double max_total_profit = 0;
+    vector<double> first_buy_sell_profits(size(prices), 0);
+    double min_price_so_far = numeric_limits<double>::max();
+    // buy and sell on ith day on the forward pass
+    for (int i = 0; i < size(prices); ++i) {
+        min_price_so_far = min(min_price_so_far, prices[i]);
+        max_total_profit = max(max_total_profit, prices[i] - min_price_so_far);
+        first_buy_sell_profits[i] = max_total_profit;
+    }
+    // buy on ith day on the second pass.. sell at max retroactively
+    double max_price_so_far = numeric_limits<double>::min();
+    for (int i = size(prices) - 1; i > 0; --i) {
+        max_price_so_far = max(max_price_so_far, prices[i]);
+        // either do nothing.. or execute best trade on ith day forward + best trade up to i-1th day
+        max_total_profit = max(max_total_profit, max_price_so_far-prices[i] + first_buy_sell_profits[i-1]);
+    }
+    return max_total_profit;
+}
 
 int main() {
     auto m = vector{3, 3, 1, 0, 2, 0, 1};
@@ -58,4 +76,6 @@ int main() {
     cout << endl;
     auto a = vector<double>{310,315,275,295,260,270,290,230,255,250};
     cout << BuyAndSellStockOnce(a) << endl;
+    auto b = vector<double>{12,11,13,9,12,8,14,13,15};
+    cout << BuyAndSellStockTwice(b) << endl;
 }
