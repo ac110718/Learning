@@ -63,6 +63,20 @@ double BuyAndSellStockTwice(const vector<double>& prices) {
     return max_total_profit;
 }
 
+//rearrange so that A0 < A1 > A2 < A3 > A4 etc..
+// don't need to do a TOTAL sort and interweave.. instead leverage locality of the solution
+// simple swap can be done as each swap would only further enhance the desired delta
+// need < if ODD on ith position and > if EVEN on ith position
+
+void Rearrange(vector<int>* A_ptr) {
+    vector<int>& A = *A_ptr;
+    for (size_t i = 1; i < size(A); ++i) {
+        if ((!(i%2) && A[i-1] < A[i]) || ((i%2) && A[i-1] > A[i])) {
+            swap(A[i-1], A[i]);
+        }
+    }
+}
+
 int main() {
     auto m = vector{3, 3, 1, 0, 2, 0, 1};
     auto n = vector{3, 2, 0, 0, 2, 0, 1};
@@ -78,4 +92,9 @@ int main() {
     cout << BuyAndSellStockOnce(a) << endl;
     auto b = vector<double>{12,11,13,9,12,8,14,13,15};
     cout << BuyAndSellStockTwice(b) << endl;
+    Rearrange(&m);
+    for (int i : m) {
+        cout << i << ", ";
+    }
+    cout << endl;
 }
