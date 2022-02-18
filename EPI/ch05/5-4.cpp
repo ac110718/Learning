@@ -21,10 +21,31 @@ vector<int> GeneratePrimes(int n) {
     return primes;
 };
 
+// two vectors.. ordering.. and elements.. apply permutation
+void ApplyPermutation(vector<int> perm, vector<char>* A_ptr) {
+    vector<char>& A = *A_ptr;
+    for (int i = 0; i < size(A); i++) {
+        while (perm[i] != i) { // keep apply swaps until ordering vector is naturally sorted. Execute through the full cycle
+            swap(A[i], A[perm[i]]); // swap the elements
+            swap(perm[i], perm[perm[i]]); // track the ordering of the positioning
+        }
+    }
+}
+
 int main() {
+
     auto p = GeneratePrimes(200);
     for (int i : p) {
         cout << i << ", ";
     }
     cout << endl;
+
+    auto x = vector{'c', 'b', 'a', 'd'};
+    auto o = vector{1, 0, 2, 3};
+    ApplyPermutation(o, &x);
+    for (auto n : x) {
+        cout << n << ", ";
+    }
+    cout << endl;
+    
 }
