@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <deque>
+#include <algorithm>
 
 using namespace std;
 
@@ -32,6 +33,25 @@ void ApplyPermutation(vector<int> perm, vector<char>* A_ptr) {
     }
 }
 
+
+// next permutation is lowest "incremental" swap possible
+// find the "kink".. and then swap the element right after this kink with the smallest item in prior list that is still "greater" than the swapped element
+// resort the remainder to minimize the suffix and "keep it as low" as possible
+
+vector<int> NextPermutation(vector<int> perm) {
+    auto inversion_point = is_sorted_until(rbegin(perm), rend(perm));
+    if (inversion_point == rend(perm)) {
+        return {}; // very last permutation if completely sorted
+    }
+    //return first element in range greater than val.. i.e. the deref inversion_point in the prefix
+    auto least_upper_bound = upper_bound(rbegin(perm), inversion_point, *inversion_point);
+    // next best you can do at the inversion point that is still an increment
+    iter_swap(inversion_point, least_upper_bound);
+    // resort remainder to minimize the suffix
+    reverse(rbegin(perm), inversion_point);
+    return perm;
+}
+
 int main() {
 
     auto p = GeneratePrimes(200);
@@ -47,5 +67,12 @@ int main() {
         cout << n << ", ";
     }
     cout << endl;
-    
+
+    auto a = vector{6, 2, 1, 5, 4, 3, 0};
+    auto b = NextPermutation(a);
+    for (auto i : b) {
+        cout << i << ", ";
+    }
+    cout << endl;
+
 }
