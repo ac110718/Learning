@@ -21,8 +21,25 @@ void RandomSampling(int k, vector<int>* A_ptr) {
 // like initiate swap with 3/4th prob.. 3 / 5.. 3 / 6.. 3 / 7 etc
 
 vector<int> OnlineRandomSample(vector<int>::const_iterator stream_begin, const vector<int>::const_iterator stream_end, int k) {
-    for (int i = 0; i < k; i++)
-}
+    //populate with first k elements 
+    vector<int> running_sample;
+    for (int i = 0; i < k; i++) {
+        running_sample.emplace_back(*stream_begin++);
+    }
+
+    default_random_engine seed((random_device())());
+
+    int num_read_so_far = k;
+    while (stream_begin != stream_end) {
+        int x = *stream_begin++;
+        num_read_so_far++;
+        // if random int from 1.. n.. is < k.. kth element is newest element (x)
+        if (const int idx_to_replace = uniform_int_distribution<int>{0, num_read_so_far-1}(seed); idx_to_replace < k) {
+            running_sample[idx_to_replace] = x;
+        }
+    }
+    return running_sample;
+};
 
 int main() {
     auto a = vector{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
