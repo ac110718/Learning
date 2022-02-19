@@ -71,6 +71,22 @@ vector<int> MatrixInSpiralOrder(vector<vector<int>> square_matrix) {
     return spiral_ordering;
 }
 
+vector<vector<int>> GeneratePascalTriangle(int num_rows) {
+    vector<vector<int>> pascal_triangle;
+    for (int i = 0; i < num_rows; i++) {
+        vector<int> curr_row; // build i number of rows
+        for (int j = 0; j <= i; j++) { // build each element
+            curr_row.emplace_back(
+                0<j && j<i ? // if not beginning or ending edge... 
+                    pascal_triangle.back()[j-1]+pascal_triangle.back()[j] // add prior row's bottom two elements
+                :   1 // default 1 if edge
+            );
+        }
+        pascal_triangle.emplace_back(curr_row); // append the finished curr row
+    }
+    return pascal_triangle;
+}
+
 int main() {
     vector<vector<int>> x = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
     vector<int> x_spiral = MatrixInSpiralOrder(x);
@@ -78,4 +94,12 @@ int main() {
         cout << elt << ", ";
     }
     cout << endl;
+    vector<vector<int>> a = GeneratePascalTriangle(5);
+    for (auto row : a) {
+        cout << " [ ";
+        for (auto elt : row ) {
+            cout << elt << ", ";
+        }
+        cout << " ] " << endl;
+    }
 }
