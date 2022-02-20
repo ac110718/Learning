@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <numeric>
 
 using namespace std;
 
@@ -27,7 +28,16 @@ string IntToString(int x) {
     return {rbegin(s), rend(s)}; // reverse the order since appended LSD first
 }
 
+// accumulate or reduce is under <numeric> library
+int StringToInt(const string& s) {
+    return (s[0] == '-' ? -1 : 1) * accumulate(begin(s) + (s[0] == '-'), end(s), 0, // begin pointer at either 0 or + 1 (s[0]=='-') is true
+        [](int running_sum, char c) { 
+            return running_sum * 10 + c - '0'; // offset against "char" 0;
+        });
+}
+
 int main() {
     cout << boolalpha << IsPalindromic("asdbdsa") << endl;
-    cout << IntToString(-100291) << endl;
+    cout << IntToString(-100291)+" is a string" << endl;
+    cout << StringToInt("-139492")+1 << endl;
 }
