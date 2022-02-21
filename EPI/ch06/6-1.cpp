@@ -36,8 +36,26 @@ int StringToInt(const string& s) {
         });
 }
 
+
+string ConstructFromBase(int num_as_int, int base) {
+    return num_as_int == 0 ? "" :
+        ConstructFromBase(num_as_int / base, base) + (char)(num_as_int % base >= 10 // build up remainder first as  prefix
+            ? 'A' + num_as_int % base - 10 // find appropriate offset
+            : '0' + num_as_int % base);
+}
+
+string ConvertBase(const string& num_as_string, int b1, int b2) {
+    bool is_negative = num_as_string.front() == '-';
+    int num_as_int = accumulate(begin(num_as_string) + is_negative, end(num_as_string), 0, [b1](int x, char c) {
+        return x * b1 + (isdigit(c) ? c - '0' : c - 'A' + 10); // in case more than 10 in base1
+    });
+    return (is_negative ? "-" : "") + (num_as_int == 0 ? "0" : ConstructFromBase(num_as_int, b2));
+}
+
+
 int main() {
     cout << boolalpha << IsPalindromic("asdbdsa") << endl;
     cout << IntToString(-100291)+" is a string" << endl;
     cout << StringToInt("-139492")+1 << endl;
+    cout << ConvertBase("615", 7, 13) << endl;
 }
