@@ -29,6 +29,22 @@ int ReplaceAndRemove(int size, char s[]) {
     return final_size;
 }
 
+bool IsPalindrome(const string& s) {
+    int i = 0, j = size(s) - 1;
+    while (i < j) {
+        while (!isalnum(s[i]) && i < j) {
+            ++i; // shift i up to appropriate position to compare
+        }
+        while (!isalnum(s[j]) && i < j) {
+            j--;
+        }
+        if (tolower(s[i++]) != tolower(s[j--])) {
+            return false;
+        }
+    }
+    return true;
+}
+
 int main() {
     char s[] = {'a', 'c', 'd', 'b', 'b', 'c', 'a'};
     int x = ReplaceAndRemove(7, s);
@@ -36,4 +52,7 @@ int main() {
         cout << c << ", ";
     }
     cout << endl;
+    cout << boolalpha << IsPalindrome("A man, a plan, a canal, Panama") << endl;
+    cout << boolalpha << IsPalindrome("Nope") << endl;
+
 }
