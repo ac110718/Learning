@@ -52,10 +52,18 @@ string ConvertBase(const string& num_as_string, int b1, int b2) {
     return (is_negative ? "-" : "") + (num_as_int == 0 ? "0" : ConstructFromBase(num_as_int, b2));
 }
 
+// convert from spreadsheet column A.. AZ.. etc to column numbers
+int SSDecodeCoID(const string& col) {
+    return accumulate(begin(col), end(col), 0, [](int result, char c) {
+        return result * 26 + c - 'A' + 1; // offset against char A as the LSD.. each subsequent digit is base 26
+    });
+}
+
 
 int main() {
     cout << boolalpha << IsPalindromic("asdbdsa") << endl;
     cout << IntToString(-100291)+" is a string" << endl;
     cout << StringToInt("-139492")+1 << endl;
     cout << ConvertBase("615", 7, 13) << endl;
+    cout << SSDecodeCoID("ZZ") << endl;
 }
