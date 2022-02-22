@@ -45,6 +45,23 @@ bool IsPalindrome(const string& s) {
     return true;
 }
 
+// reverse just ordering of words.. which can be done by reversing all characters.. and 
+// inverting each word back to forward order
+void ReverseWords(string* s) {
+    // reverse each character
+    reverse(begin(*s), end(*s));
+    // create offsets to mark beginning and end of individual words
+    size_t start = 0, finish;
+    while ((finish = s->find(" ", start)) != string::npos) {
+        // reverse each word
+        reverse(begin(*s) + start, begin(*s) + finish);
+        // set start to beginning of next word after the space
+        start = finish + 1;
+    }
+    // reverse the last word uncaught by while loop and last " "
+    reverse(begin(*s) + start, end(*s));
+}
+
 int main() {
     char s[] = {'a', 'c', 'd', 'b', 'b', 'c', 'a'};
     int x = ReplaceAndRemove(7, s);
@@ -54,5 +71,7 @@ int main() {
     cout << endl;
     cout << boolalpha << IsPalindrome("A man, a plan, a canal, Panama") << endl;
     cout << boolalpha << IsPalindrome("Nope") << endl;
-
+    string a = "A man, a plan, a canal, Panama";
+    ReverseWords(&a);
+    cout << a << endl;
 }
