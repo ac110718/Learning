@@ -1,5 +1,23 @@
+use std::str::FromStr; // bring in FromStr trait (interface) into namespace
+use std::env;
+
 fn main() {
-    println!("Hello, world!");
+    let mut numbers = Vec::new();
+    for arg in env::args().skip(1) {
+        // from_str implementation for u64.. returns Result (ok, error).. 
+        // expect handles error
+        numbers.push(u64::from_str(&arg).expect("error parsing argument"));
+    }
+    if numbers.len() == 0 {
+        eprintln!("Usage: gcd NUMBER ...");
+        std::process::exit(1);
+    }
+    let mut d = numbers[0];
+    for m in &numbers[1..] { // borrow reference pointer to vector's elements
+        d = gcd(d, *m); // dereference m.. iterate through all elements
+    }
+    // template string with parameters. {:?} catch-all for debugging print types
+    println!("The greatest common divisor of {:?} is {}", numbers, d);
 }
 
 fn gcd(mut n: u64, mut m: u64) -> u64 {
