@@ -1,6 +1,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -56,6 +57,22 @@ vector<string> GetValidIpAddress (const string& s) {
     return result;
 }
 
+//write string sinusoidily. depending on row.. pick appropriate start + number of spaces to skip
+
+string SnakeString(const string& s) {
+    string result;
+    for (int i = 1; i < size(s); i +=4) {
+        result += s[i];
+    }
+    for (int i = 0; i < size(s); i +=2) {
+        result += s[i];
+    }
+    for (int i = 3; i < size(s); i +=4) {
+        result += s[i];
+    }
+    return result;
+}
+
 int main() {
     cout << RomanToInteger("LVIIII") << endl;
     cout << RomanToInteger("LIX") << endl;
@@ -63,4 +80,5 @@ int main() {
     for (auto ip : x) {
         cout << ip << endl;
     }
+    cout << SnakeString("Hello_World!") << endl;
 }
