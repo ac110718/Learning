@@ -73,6 +73,34 @@ string SnakeString(const string& s) {
     return result;
 }
 
+//variable length encoding and decoding
+string Decoding(const string &s) {
+    int count = 0;
+    string result;
+    for (const char &c : s) {
+        if (isdigit(c)) {
+            count = count * 10 + c - '0'; // could be multiple digit repetition
+        } else {
+            result.append(count, c);
+            count = 0;
+        }
+    }
+    return result;
+}
+
+string Encoding(const string &s) {
+    string result;
+    for (int i = 1, count = 1; i <= size(s); i++) {
+        if (i == size(s) || s[i] != s[i-1]) { // unique, so record what you've encountered
+            result += to_string(count) + s[i-1]; 
+            count = 1;
+        } else {
+            count++; // s[i] == s[i-1]
+        }
+    }
+    return result;
+}
+
 int main() {
     cout << RomanToInteger("LVIIII") << endl;
     cout << RomanToInteger("LIX") << endl;
@@ -81,4 +109,6 @@ int main() {
         cout << ip << endl;
     }
     cout << SnakeString("Hello_World!") << endl;
+    cout << Encoding("aaaabcccaazzzz") << endl;
+    cout << Decoding(Encoding("aaaabcccaazzzz")) << endl;
 }
