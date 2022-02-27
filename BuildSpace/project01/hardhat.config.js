@@ -22,7 +22,11 @@ module.exports = {
   networks: {
     rinkeby: {
       url: "https://eth-rinkeby.alchemyapi.io/v2/kczHIrpF2HS14tORrbELMm8pssvAalHV",
-      accounts: process.env.SECRET_KEY
+      accounts: [process.env.SECRET_KEY]
     },
   },
 };
+
+// Deploying contracts with account:  0xcdC59f691aab231810417BC4088149628A75C87f
+// Account balance:  98438939478497818
+// WavePortal address:  0xFe09F2Ec2e2Df4D474e1969F12e263b5D80b2045
