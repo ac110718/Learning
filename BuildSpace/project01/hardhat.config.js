@@ -21,12 +21,12 @@ module.exports = {
   solidity: "0.8.4",
   networks: {
     rinkeby: {
-      url: "https://eth-rinkeby.alchemyapi.io/v2/kczHIrpF2HS14tORrbELMm8pssvAalHV",
+      url: process.env.STAGING_ALCHEMY_KEY,
       accounts: [process.env.SECRET_KEY]
     },
   },
 };
 
 // Deploying contracts with account:  0xcdC59f691aab231810417BC4088149628A75C87f
-// Account balance:  98438939478497818
-// WavePortal address:  0xFe09F2Ec2e2Df4D474e1969F12e263b5D80b2045
+// Account balance:  96054339968743826
+// WavePortal address:  0x1ABbFD6f864190f5bD26566d1fFBD591eF1ce19A
