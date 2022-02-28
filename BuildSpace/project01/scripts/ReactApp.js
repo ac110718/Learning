@@ -1,3 +1,5 @@
+// https://waveportal-starter-project.allenchan3.repl.co/
+
 import React, { useEffect, useState } from "react";
 import './App.css';
 import {ethers} from "ethers"; // library to talk to contract
