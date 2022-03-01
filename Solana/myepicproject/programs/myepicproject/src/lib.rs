@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
+declare_id!("HwM4AQWCqLT6ixzpzw2Poz1GivsFjVWs68SPJe6hrf3E");
 
 #[program]
 pub mod myepicproject {
@@ -22,10 +22,25 @@ pub mod myepicproject {
         let item = ItemStruct {
             gif_link: gif_link.to_string(),
             user_address: *user.to_account_info().key,
+            likes: 0,
+            lamports: 0,
+            id: base_account.total_gifs,
         };
 
         base_account.gif_list.push(item);
         base_account.total_gifs += 1;
+        Ok(())
+    }
+
+    pub fn add_like(ctx: Context<AddGif>, id: u64) -> Result<()> {
+        let base_account = &mut ctx.accounts.base_account;
+        base_account.gif_list[id as usize].likes += 1;
+        Ok(())
+    }
+
+    pub fn add_tip(ctx: Context<AddGif>, id: u64, tip: u64) -> Result<()> {
+        let base_account = &mut ctx.accounts.base_account;
+        base_account.gif_list[id as usize].lamports += tip;
         Ok(())
     }
 }
@@ -53,6 +68,9 @@ pub struct AddGif<'info> {
 pub struct ItemStruct {
     pub gif_link: String,
     pub user_address: Pubkey,
+    pub likes: u64,
+    pub lamports: u64,
+    pub id: u64,
 }
 
 #[account]

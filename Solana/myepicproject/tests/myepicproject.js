@@ -33,6 +33,26 @@ const main = async() => {
   account = await program.account.baseAccount.fetch(baseAccount.publicKey);
   console.log('GIF count', account.totalGifs.toString());
   console.log('GIF List', account.gifList)
+
+  await program.rpc.addLike(new anchor.BN(0), {
+    accounts: {
+      baseAccount: baseAccount.publicKey,
+      user: provider.wallet.publicKey,
+    },
+  });
+
+  await program.rpc.addTip(new anchor.BN(0), new anchor.BN(25), {
+    accounts: {
+      baseAccount: baseAccount.publicKey,
+      user: provider.wallet.publicKey,
+    },
+  });
+
+
+  account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+  console.log('Likes', account.gifList[0].likes.toString());
+  console.log('Tips', account.gifList[0].lamports.toString());
+
 }
 
 const runMain = async () => {
