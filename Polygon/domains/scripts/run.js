@@ -7,19 +7,45 @@ const main = async () => {
   console.log("Contract deployed to:", domainContract.address);
   console.log("Contract deployed by:", owner.address);
 
-  let txn = await domainContract.register("achan", {value: hre.ethers.utils.parseEther('0.1')});
+  let txn = await domainContract.register("achan", {value: hre.ethers.utils.parseEther('0.01234')});
   await txn.wait();
-
-  const domainOwner = await domainContract.getAddress("achan");
-  console.log("Owner of domain achan:", domainOwner);
 
   const balance = await hre.ethers.provider.getBalance(domainContract.address);
   console.log("Contract balance:", hre.ethers.utils.formatEther(balance));
 
-  txn = await domainContract.connect(owner).setRecord("achan", "this is my bio");
-  await txn.wait(); 
-  const record = await domainContract.getRecord("achan");
-  console.log("Record output:", record);
+  try {
+      txn = await domainContract.connect(otherPerson).withdraw();
+      await txn.wait();
+  } catch (error) {
+      console.log(error)
+  }
+
+  let ownerBalance = await hre.ethers.provider.getBalance(owner.address);
+  console.log("Balance of owner before withdrawal:", hre.ethers.utils.formatEther(ownerBalance));
+
+  txn = await domainContract.connect(owner).withdraw();
+  await txn.wait();
+
+  const contractBalance = await hre.ethers.provider.getBalance(domainContract.address);
+  ownerBalance = await hre.ethers.provider.getBalance(owner.address);
+
+  console.log("Contract balance after withdrawal:", hre.ethers.utils.formatEther(contractBalance));
+  console.log("Balance of owner after withdrawal:", hre.ethers.utils.formatEther(ownerBalance));
+
+  try {
+      txn = await domainContract.register("achan", {value: hre.ethers.utils.parseEther('0.01234')});
+      await txn.wait();
+  } catch (error) {
+      console.log("Double registration", error);
+  }
+
+  try {
+    txn = await domainContract.register("ac", {value: hre.ethers.utils.parseEther('0.01234')});
+    await txn.wait();
+} catch (error) {
+    console.log("Invalid name", error.name);
+}
+
 };
 
 const runMain = async () => {

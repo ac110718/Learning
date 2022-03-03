@@ -4,12 +4,15 @@ pragma solidity ^0.8.10;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import {Base64} from "./libraries/Base64.sol";
-
 import "hardhat/console.sol";
 
 
 //inherit from ERC721URIStorage contract
 contract Domains is ERC721URIStorage {
+
+  error Unauthorized();
+  error AlreadyRegistered();
+  error InvalidName(string name);
 
   //track tokenIds with gas efficient structure
   using Counters for Counters.Counter;
@@ -23,10 +26,23 @@ contract Domains is ERC721URIStorage {
 
   mapping(string => address) public domains;
   mapping(string => string) public records;
+  mapping (uint => string) public names;
+  address payable public owner;
 
   constructor(string memory _tld) payable ERC721("ENS Name Service", "ENS") {
+    owner = payable(msg.sender);
     tld = _tld;
     console.log("%s name service deployed", _tld);
+  }
+
+  function getAllNames() public view returns (string[] memory) {
+    console.log("Getting all names from contract");
+    string[] memory allNames = new string[](_tokenIds.current());
+    for (uint i = 0; i < _tokenIds.current(); i++) {
+      allNames[i] = names[i];
+      console.log("Name for token %d is %s", i, allNames[i]);
+    }
+    return allNames;
   }
 
   // price of domain based on length
@@ -34,18 +50,23 @@ contract Domains is ERC721URIStorage {
     uint len = bytes(name).length;
     require(len > 0);
     if (len == 3) {
-      return 5 * 10**17; // 5 MATIC is 5 * 10^18 so 0.5 MATIC
+      return 5 * 10**15; // 5 MATIC is 5 * 10^18 so 0.005 MATIC
     } else if (len == 4) {
-      return 3 * 10**17;
+      return 3 * 10**15;
     } else {
-      return 1 * 10**17;
+      return 1 * 10**15;
     }
+  }
+
+  function valid(string calldata name) public pure returns(bool) {
+      return bytes(name).length >= 3 && bytes(name).length <= 10;
   }
 
   // calldata keyword non-persistent, not modified vs. memory
   function register(string calldata name) public payable {
     //ensure unused domain
-    require(domains[name] == address(0));
+    if (domains[name] != address(0)) revert AlreadyRegistered();
+    if (!valid(name)) revert InvalidName(name);
     uint _price = price(name);
     require(msg.value >= _price, "Not enough Matic paid");
 
@@ -85,6 +106,7 @@ contract Domains is ERC721URIStorage {
     _setTokenURI(newRecordId, finalTokenUri);
     domains[name] = msg.sender;
 
+    names[newRecordId] = name;
     _tokenIds.increment();
   }
 
@@ -93,11 +115,29 @@ contract Domains is ERC721URIStorage {
   }
 
   function setRecord(string calldata name, string calldata record) public {
-    require(domains[name] == msg.sender);
+    if (msg.sender != domains[name]) revert Unauthorized();
     records[name] = record;
   }
 
   function getRecord(string calldata name) public view returns(string memory) {
     return records[name];
   }
+
+  modifier onlyOwner() {
+    require(isOwner());
+    _;
+  }
+
+  function isOwner() public view returns (bool) {
+    return msg.sender == owner;
+  }
+
+  function withdraw() public onlyOwner {
+    uint amount = address(this).balance;
+    
+    (bool success, ) = msg.sender.call{value: amount}("");
+    require(success, "Failed to withdraw Matic");
+  } 
+
 }
+

@@ -21,11 +21,9 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   solidity: "0.8.10",
   networks: {
 		mumbai: {
-      url: process.env.STAGING_ALCHEMY_KEY,
+      url: process.env.STAGING_ALCHEMY_URL,
       accounts: [process.env.SECRET_KEY],
 		}
   }
 };
 
-// url: process.env.STAGING_ALCHEMY_KEY,
-//       accounts: [process.env.SECRET_KEY]
