@@ -51,6 +51,28 @@ shared_ptr<ListNode<int>> MergeTwoSortedLists(shared_ptr<ListNode<int>> L1, shar
     return dummy_head->next; // stayed in place whole time, pointing to 1st element
 }
 
+// Reverse a sublist from start position to finish position
+// use trackers to point to "future" and "prior" orientations
+
+shared_ptr<ListNode<int>> ReverseSublist(shared_ptr<ListNode<int>> L, int start, int finish) {
+    auto dummy_head = make_shared<ListNode<int>>(ListNode<int>{0, L});
+    auto sublist_head = dummy_head;
+    int k = 1;
+    while (k++ < start) {
+        sublist_head = sublist_head->next;
+    }
+    // start reverse process, with sublist_iter as the forward progressor
+    // sublist_head will point "prior"
+    auto sublist_iter = sublist_head->next;
+    while (start++ < finish) {
+        auto temp = sublist_iter->next; // manipulate
+        sublist_iter->next = temp->next; // push iter forward for next pass
+        temp->next = sublist_head->next; // reverse orientation
+        sublist_head->next = temp; // push prior forward
+    }
+    return dummy_head->next;
+}
+
 
 
 int main() {
@@ -80,9 +102,16 @@ int main() {
     InsertAfter(f, g);
     InsertAfter(g, h);
     auto combined = MergeTwoSortedLists(e, x);
+    auto extra = combined;
     while (combined != NULL) {
         cout << combined -> data;
         combined = combined -> next;
+    }
+    cout << endl;
+    extra = ReverseSublist(extra, 2, 7);
+    while (extra != NULL) {
+        cout << extra -> data;
+        extra = extra -> next;
     }
     cout << endl;
 }
