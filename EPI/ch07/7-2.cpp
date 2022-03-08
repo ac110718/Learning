@@ -44,6 +44,33 @@ shared_ptr<ListNode<int>> HasCycle(const shared_ptr<ListNode<int>>& head) {
     return nullptr; // no cycle
 }
 
+//Overlapping list with no cycles? By definition will have the same tail (no way to diverge later)
+
+int Length(shared_ptr<ListNode<int>> L) {
+    int length = 0;
+    while (L) {
+        ++length;
+        L = L->next;
+    }
+    return length;
+}
+
+void AdvanceListByK(int k, shared_ptr<ListNode<int>>* L) {
+    while (k--) {
+        *L = (*L)->next;
+    }
+}
+
+shared_ptr<ListNode<int>> OverlappingNoCycleLists(shared_ptr<ListNode<int>> l0, shared_ptr<ListNode<int>> l1) {
+    int l0_len = Length(l0), l1_len = Length(l1);
+    AdvanceListByK(abs(l0_len - l1_len), l0_len > l1_len ? &l0 : &l1);
+    while (l0 && l1 && l0 != l1) {
+        l0 = l0->next;
+        l1 = l1->next;
+    }
+    return l0; // will return a node only if there is a mutual overlap (l0 == l1)
+}
+
 int main() {
     auto list = shared_ptr<ListNode<int>>(new ListNode<int>{0});
     auto build = list;
@@ -59,4 +86,17 @@ int main() {
     build->next = cycle_starter;
     auto x = HasCycle(list);
     cout << x->data << endl;
+    auto l0 = shared_ptr<ListNode<int>>(new ListNode<int>{50});
+    auto l1 = shared_ptr<ListNode<int>>(new ListNode<int>{51});
+    auto build2 = shared_ptr<ListNode<int>>(new ListNode<int>{52});
+    auto build2_head = build2;
+    for (int i = 0; i < 10; i++) {
+        auto temp = shared_ptr<ListNode<int>>(new ListNode<int>{i});
+        AppendNode(&temp, &build2);
+    }
+    l0->next = shared_ptr<ListNode<int>>(new ListNode<int>{49});
+    l0->next->next = build2_head->next->next->next->next;
+    l1->next = build2_head;
+    auto y = OverlappingNoCycleLists(l1, l0);
+    cout << y->data << endl;
 }
