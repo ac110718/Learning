@@ -71,6 +71,24 @@ shared_ptr<ListNode<int>> OverlappingNoCycleLists(shared_ptr<ListNode<int>> l0, 
     return l0; // will return a node only if there is a mutual overlap (l0 == l1)
 }
 
+// remove kth last element from a list
+
+shared_ptr<ListNode<int>> RemoveKthLast(const shared_ptr<ListNode<int>> &L, int k) {
+    auto dummy_head = make_shared<ListNode<int>>(ListNode<int>{0, L});
+    auto first = dummy_head->next;
+    while (k--) { // advance k steps ahead to be placeholder
+        first = first->next;
+    }
+    auto second = dummy_head;
+    while (first) {
+        second = second->next, first = first->next;
+    } // hit dead end
+    cout << "deleting " << second->next->data << endl;
+    second->next = second->next->next; // delete the node
+    return dummy_head->next; 
+}
+
+
 int main() {
     auto list = shared_ptr<ListNode<int>>(new ListNode<int>{0});
     auto build = list;
@@ -99,4 +117,5 @@ int main() {
     l1->next = build2_head;
     auto y = OverlappingNoCycleLists(l1, l0);
     cout << y->data << endl;
+    RemoveKthLast(l0, 4);
 }
