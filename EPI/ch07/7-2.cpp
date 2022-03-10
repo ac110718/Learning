@@ -88,6 +88,19 @@ shared_ptr<ListNode<int>> RemoveKthLast(const shared_ptr<ListNode<int>> &L, int 
     return dummy_head->next; 
 }
 
+shared_ptr<ListNode<int>> RemoveDuplicates(const shared_ptr<ListNode<int>> &L) {
+    auto iter = L;
+    while (iter) {
+        auto next_distinct = iter->next;
+        while (next_distinct && next_distinct->data == iter->data) {
+            next_distinct = next_distinct->next;
+        }
+        iter->next = next_distinct; // skip all the way till next unique node
+        iter = next_distinct; // progress forward on next round within this while loop on iter
+    }
+    return L;
+}
+
 
 int main() {
     auto list = shared_ptr<ListNode<int>>(new ListNode<int>{0});
@@ -118,4 +131,20 @@ int main() {
     auto y = OverlappingNoCycleLists(l1, l0);
     cout << y->data << endl;
     RemoveKthLast(l0, 4);
+    auto s0 = shared_ptr<ListNode<int>>(new ListNode<int>{0});
+    auto s1 = shared_ptr<ListNode<int>>(new ListNode<int>{0});
+    auto s2 = shared_ptr<ListNode<int>>(new ListNode<int>{1});
+    auto s3 = shared_ptr<ListNode<int>>(new ListNode<int>{1});
+    auto s4 = shared_ptr<ListNode<int>>(new ListNode<int>{2});
+    auto s5 = shared_ptr<ListNode<int>>(new ListNode<int>{2});
+    s0->next = s1;
+    s1->next = s2;
+    s2->next = s3;
+    s3->next = s4;
+    s4->next = s5;
+    auto unique_L = RemoveDuplicates(s0);
+    while (unique_L) {
+        cout << unique_L->data;
+        unique_L = unique_L->next;
+    }
 }
