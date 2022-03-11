@@ -101,6 +101,28 @@ shared_ptr<ListNode<int>> RemoveDuplicates(const shared_ptr<ListNode<int>> &L) {
     return L;
 }
 
+shared_ptr<ListNode<int>> CyclicalllyRightShiftList(shared_ptr<ListNode<int>> L, int k) {
+    if (L == nullptr) {
+        return L;
+    }
+    auto tail = L;
+    int n = 1;
+    while (tail->next) {
+        ++n;
+        tail = tail->next;
+    }
+    k %= n;
+    if (k == 0) { return L; }
+    tail->next = L; // create a new cycle
+    int steps_to_new_head = n-k;
+    auto new_tail = tail;
+    while (steps_to_new_head--) {
+        new_tail = new_tail->next; // advance to end of new tail positioning
+    }
+    auto new_head = new_tail->next; // ref to new head
+    new_tail->next = nullptr; // snip the tail
+    return new_head;
+}
 
 int main() {
     auto list = shared_ptr<ListNode<int>>(new ListNode<int>{0});
@@ -146,5 +168,16 @@ int main() {
     while (unique_L) {
         cout << unique_L->data;
         unique_L = unique_L->next;
+    }
+    cout << endl;
+    s0->next = s1;
+    s1->next = s2;
+    s2->next = s3;
+    s3->next = s4;
+    s4->next = s5;
+    auto test = CyclicalllyRightShiftList(s0, 2);
+    while (test) {
+        cout << test->data;
+        test = test->next;
     }
 }
