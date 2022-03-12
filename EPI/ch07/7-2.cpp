@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <array>
 using namespace std;
 
 template <typename T>
@@ -124,6 +125,27 @@ shared_ptr<ListNode<int>> CyclicalllyRightShiftList(shared_ptr<ListNode<int>> L,
     return new_head;
 }
 
+// even positioned first, followed by odd positioned nodes
+
+shared_ptr<ListNode<int>> EvenOddMerge(const shared_ptr<ListNode<int>> &L) {
+    if (L == nullptr) {
+        return L;
+    }
+    auto even_dummy_head = make_shared<ListNode<int>>(ListNode<int>{0, nullptr});
+    auto odd_dummy_head = make_shared<ListNode<int>>(ListNode<int>{0, nullptr});
+    array<shared_ptr<ListNode<int>>, 2> tails = {even_dummy_head, odd_dummy_head};
+    int turn = 0;
+    for (auto iter = L; iter; iter = iter->next) { 
+        // create two lists that pull out even and odd positioned nodes
+        tails[turn]->next = iter;
+        tails[turn] = tails[turn]->next;
+        turn ^= 1; // flip alternate builder list
+    }
+    tails[1]->next = nullptr; // end with odd
+    tails[0]->next = odd_dummy_head->next;
+    return even_dummy_head->next;
+}
+
 int main() {
     auto list = shared_ptr<ListNode<int>>(new ListNode<int>{0});
     auto build = list;
@@ -179,5 +201,17 @@ int main() {
     while (test) {
         cout << test->data;
         test = test->next;
+    }
+    cout << endl;
+    s0->next = s1;
+    s1->next = s2;
+    s2->next = s3;
+    s3->next = s4;
+    s4->next = s5;
+    s5->next = nullptr;
+    auto test2 = EvenOddMerge(s0);
+    while (test2) {
+        cout << test2->data;
+        test2 = test2->next;
     }
 }

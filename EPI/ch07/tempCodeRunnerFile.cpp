@@ -1,1 +1,4 @@
-auto s5 = shared_ptr<ListNode<int>>(new ListNode<int>{2});
+   while (test) {
+        cout << test->data;
+        test = test->next;
+    }
