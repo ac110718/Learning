@@ -146,6 +146,39 @@ shared_ptr<ListNode<int>> EvenOddMerge(const shared_ptr<ListNode<int>> &L) {
     return even_dummy_head->next;
 }
 
+
+shared_ptr<ListNode<int>> ReverseLL(shared_ptr<ListNode<int>> L) {
+    shared_ptr<ListNode<int>> current = L;
+    shared_ptr<ListNode<int>> prev = NULL;
+    shared_ptr<ListNode<int>> next = NULL;
+    while (current != NULL) {
+        next = current->next; // set next placeholder
+        current->next = prev; // reverse orientation of curr
+        prev = current; // move prev and curr both forward (next already done and had to do it earlier)
+        current = next;
+    }
+    shared_ptr<ListNode<int>> head = prev; // set head to be end right before null
+    return head;
+}
+
+bool IsLinkedListAPalindrome(shared_ptr<ListNode<int>> L) {
+    shared_ptr<ListNode<int>> slow = L, fast = L;
+    while (fast && fast->next) {
+        fast = fast->next->next;
+        slow = slow->next;
+    }
+    auto first_half_iter = L;
+    auto second_half_iter = ReverseLL(slow);
+    while (second_half_iter && first_half_iter) {
+        if (second_half_iter->data != first_half_iter->data) {
+            return false;
+        }
+        second_half_iter = second_half_iter->next;
+        first_half_iter = first_half_iter->next;
+    }
+    return true;
+}
+
 int main() {
     auto list = shared_ptr<ListNode<int>>(new ListNode<int>{0});
     auto build = list;
@@ -210,8 +243,18 @@ int main() {
     s4->next = s5;
     s5->next = nullptr;
     auto test2 = EvenOddMerge(s0);
+    auto test3 = test2;
     while (test2) {
         cout << test2->data;
         test2 = test2->next;
     }
+    cout << endl;
+    s0->next = s2;
+    s2->next = s4;
+    s4->next = s5;
+    s5->next = s3;
+    s3->next = s1;
+    s1->next = nullptr;
+    cout << boolalpha << IsLinkedListAPalindrome(s0) << endl;
+    cout << boolalpha << IsLinkedListAPalindrome(test3) << endl;
 }
