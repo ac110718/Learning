@@ -179,6 +179,21 @@ bool IsLinkedListAPalindrome(shared_ptr<ListNode<int>> L) {
     return true;
 }
 
+shared_ptr<ListNode<int>> AddTwoNumbers(shared_ptr<ListNode<int>> L1, shared_ptr<ListNode<int>> L2) {
+    shared_ptr<ListNode<int>> dummy_head(new ListNode<int>);
+    auto place_iter = dummy_head;
+    int carry = 0;
+    while (L1 || L2 || carry) {
+        int val = carry + (L1 ? L1->data : 0) + (L2 ? L2->data : 0);
+        L1 = L1 ? L1->next : nullptr;
+        L2 = L2 ? L2->next : nullptr;
+        place_iter->next = make_shared<ListNode<int>>(ListNode<int>{val % 10, nullptr});
+        carry = val / 10;
+        place_iter = place_iter->next;
+    }
+    return dummy_head->next;
+}
+
 int main() {
     auto list = shared_ptr<ListNode<int>>(new ListNode<int>{0});
     auto build = list;
@@ -244,6 +259,7 @@ int main() {
     s5->next = nullptr;
     auto test2 = EvenOddMerge(s0);
     auto test3 = test2;
+    auto test4 = test2;
     while (test2) {
         cout << test2->data;
         test2 = test2->next;
@@ -257,4 +273,16 @@ int main() {
     s1->next = nullptr;
     cout << boolalpha << IsLinkedListAPalindrome(s0) << endl;
     cout << boolalpha << IsLinkedListAPalindrome(test3) << endl;
+    s0->next = s2;
+    s2->next = s4;
+    s4->next = s5;
+    s5->next = s3;
+    s3->next = s1;
+    s1->next = nullptr;
+    auto result = AddTwoNumbers(s0, test4);
+    while (result) {
+        cout << result->data;
+        result = result->next;
+    }
+    cout << endl;
 }
