@@ -22,6 +22,34 @@ void PrintLinkedListInReverse(shared_ptr<ListNode<int>> head) {
     }
 }
 
+// class with cached Max API. Each element is a struct w data + max
+
+class Stack {
+  public:
+    bool Empty() const {
+        return empty(element_with_cached_max_);
+    }
+    int Max() const {
+        return element_with_cached_max_.top().max;
+    }
+    int Pop() {
+        int pop_element = element_with_cached_max_.top().element;
+        element_with_cached_max_.pop();
+        return pop_element;
+    }
+    void Push(int x) {
+        element_with_cached_max_.emplace(
+            ElementWithCachedMax{x, max(x, Empty() ? x : Max())} // compare x to current Max()
+        );
+    }
+  private:
+    struct ElementWithCachedMax {
+        int element;
+        int max;
+    };
+    stack<ElementWithCachedMax> element_with_cached_max_;
+};
+
 int main() {
     vector<shared_ptr<ListNode<int>>> node_vec;
     shared_ptr<ListNode<int>> next_node;
@@ -33,4 +61,11 @@ int main() {
         next_node = temp;
     }
     PrintLinkedListInReverse(next_node);
+    Stack max_test;
+    max_test.Push(5);
+    max_test.Push(3);
+    max_test.Push(7);
+    while (!max_test.Empty()) {
+        cout << "Max " << max_test.Max() << " | Element " << max_test.Pop() << endl;
+    }
 }
