@@ -1,6 +1,8 @@
 #include <iostream>
 #include <stack>
 #include <vector>
+#include <unordered_map>
+#include <sstream>
 
 using namespace std;
 
@@ -50,6 +52,32 @@ class Stack {
     stack<ElementWithCachedMax> element_with_cached_max_;
 };
 
+// RPN
+int Evaluate(const string& expression) {
+    stack<int> intermediate_results;
+    stringstream ss(expression);
+    string token;
+    const char kDelimiter = ',';
+    const unordered_map<string, function<int(int, int)>> kOperators = {
+        {"+", [](int x, int y) -> int { return x + y; }},
+        {"-", [](int x, int y) -> int { return x - y; }},
+        {"*", [](int x, int y) -> int { return x * y; }},
+        {"/", [](int x, int y) -> int { return x / y; }}
+    };
+    while (getline(ss, token, kDelimiter)) { // extract token from ss with kDelimiter
+        if (kOperators.count(token)) {
+            // evalute expression and put back into stake
+            const int y = intermediate_results.top();
+            intermediate_results.pop();
+            const int x = intermediate_results.top();
+            intermediate_results.pop();
+            intermediate_results.emplace(kOperators.at(token)(x, y));
+        } else {
+            intermediate_results.emplace(stoi(token));
+        }
+    }
+    return intermediate_results.top();
+}
 int main() {
     vector<shared_ptr<ListNode<int>>> node_vec;
     shared_ptr<ListNode<int>> next_node;
@@ -68,4 +96,5 @@ int main() {
     while (!max_test.Empty()) {
         cout << "Max " << max_test.Max() << " | Element " << max_test.Pop() << endl;
     }
+    cout << Evaluate("3,4,+,2,*,1,+") << endl;
 }
