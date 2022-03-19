@@ -78,6 +78,24 @@ int Evaluate(const string& expression) {
     }
     return intermediate_results.top();
 }
+
+bool IsWellFormed(const string& s) {
+    stack<char> left_chars;
+    const unordered_map<char, char> kLookup = {
+        {'(', ')'}, {'{', '}'}, {'[', ']'}
+    };
+    for (int i = 0; i < size(s); i++) {
+        if (kLookup.count(s[i])) { // place any left parens into stack for comparison later
+            left_chars.emplace(s[i]);
+        } else {
+            if (empty(left_chars) || kLookup.at(left_chars.top()) != s[i]) {
+                return false; // no match for the right parens
+            }
+            left_chars.pop(); // next comparison
+        }
+    }
+    return empty(left_chars); // successful completion of comparisons without extras
+}
 int main() {
     vector<shared_ptr<ListNode<int>>> node_vec;
     shared_ptr<ListNode<int>> next_node;
@@ -97,4 +115,6 @@ int main() {
         cout << "Max " << max_test.Max() << " | Element " << max_test.Pop() << endl;
     }
     cout << Evaluate("3,4,+,2,*,1,+") << endl;
+    cout << boolalpha << IsWellFormed("(()][){}]") << endl;
+    cout << IsWellFormed("[()[]]{}") << endl;
 }
