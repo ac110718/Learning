@@ -96,6 +96,33 @@ bool IsWellFormed(const string& s) {
     }
     return empty(left_chars); // successful completion of comparisons without extras
 }
+
+// Sunset view. Given array of buildings from east-to-west order, find buildings that will have sunset view when facing west
+// store building into stack.. if top of stack is smaller than next building in array.. it has a blocked view..
+// so eject from stack until top of stack (point of comparison) is bigger than current building in array.. then place into stack
+// all buildings left in stack are the once that are from highest to lowest height with a sunset view
+
+vector<int> ExamineBuildingsWithSunset(vector<int>::const_iterator sequence_begin, const vector<int>::const_iterator& sequence_end) {
+    int building_idx = 0;
+    struct BuildingWithHeight{
+        int id, height;
+    };
+    stack<BuildingWithHeight> candidates;
+    while (sequence_begin != sequence_end) {
+        int building_height = *sequence_begin++;
+        while (!empty(candidates) && building_height >= candidates.top().height) {
+            candidates.pop(); // empty stack until you go back to building that's taller from east side b/c others will be blocked by curr
+        }
+        candidates.emplace(BuildingWithHeight{building_idx++, building_height}); // building is shorter. Add to stack
+    }
+    vector<int> buildings_with_sunset;
+    while (!empty(candidates)) {
+            buildings_with_sunset.emplace_back(candidates.top().id);
+            candidates.pop();
+    }
+    return buildings_with_sunset;
+}
+
 int main() {
     vector<shared_ptr<ListNode<int>>> node_vec;
     shared_ptr<ListNode<int>> next_node;
@@ -117,4 +144,10 @@ int main() {
     cout << Evaluate("3,4,+,2,*,1,+") << endl;
     cout << boolalpha << IsWellFormed("(()][){}]") << endl;
     cout << IsWellFormed("[()[]]{}") << endl;
+    vector<int> buildings = {7, 1, 5, 4, 2, 3, 1};
+    auto result = ExamineBuildingsWithSunset(buildings.begin(), buildings.end());
+    for (int i = size(result) - 1; i >= 0; i--) {
+        cout << result[i] << ", ";
+    }
+    cout << endl;
 }
