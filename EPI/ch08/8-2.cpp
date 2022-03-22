@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <stack>
 
 using namespace std;
 template <typename T>
@@ -90,8 +91,37 @@ void print_vec_vec(vector<vector<int>>& input) {
     cout << ">" << endl;
 }
 
+// Queue implementation with stack
+class Queue {
+  public:
+    void Enqueue(int x) {
+        enqueue_.emplace(x);
+    }
+    int Dequeue() {
+        if(empty(dequeue_)) {
+            while (!empty(enqueue_)) {
+                dequeue_.emplace(enqueue_.top()); // newest enqueue element will be buried at the bottom of dequeue stack
+                enqueue_.pop();
+            }
+        }
+        int result = dequeue_.top();
+        dequeue_.pop();
+        return result;
+    }
+  private:
+    stack<int> enqueue_, dequeue_;
+};
+
 int main() {
     create_tree();
     auto result = BinaryTreeDepthOrder(A);
     print_vec_vec(result);
+    Queue test_queue;
+    for (int i = 0; i < 5; i++) {
+        test_queue.Enqueue(i);
+    }
+    for (int i = 0; i < 5; i++) {
+        cout << test_queue.Dequeue() << ",";
+    }
+    cout << endl;
 }
