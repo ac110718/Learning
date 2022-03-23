@@ -112,6 +112,40 @@ class Queue {
     stack<int> enqueue_, dequeue_;
 };
 
+//Queue With Max. 
+// Keep two queues.. one that holds the max up to a certain point. 
+// Always compare the heads.. pop out the max queue only when it is the same as normal queue
+// When enqueuing, empty out the back of the max queue to update for any bigger max that has been loaded into the normal queue
+
+template <typename T>
+class QueueWithMax {
+  public:
+    void Enqueue(const T& x) {
+        entries_.emplace(x);
+        while (!empty(candidates_for_max_) && candidates_for_max_.back() < x) {
+            candidates_for_max_.pop_back(); // update for any bigger max loaded into queue
+        }
+        candidates_for_max_.emplace_back(x);
+        cout << entries_.front() << " | " << candidates_for_max_.front() << endl;
+    }
+
+    T Dequeue() {
+        T result = entries_.front();
+        if (result == candidates_for_max_.front()) {
+            candidates_for_max_.pop_front(); // remove the max as it leaves the normal queue
+        }
+        entries_.pop();
+        cout << entries_.front() << " | " << candidates_for_max_.front() << endl;
+        return result;
+    }
+
+    const T& Max() const {return candidates_for_max_.front();} // max_queue will always have descending pattern
+
+  private:
+    queue<T> entries_;
+    deque<T> candidates_for_max_;
+};
+
 int main() {
     create_tree();
     auto result = BinaryTreeDepthOrder(A);
@@ -124,4 +158,16 @@ int main() {
         cout << test_queue.Dequeue() << ",";
     }
     cout << endl;
+    QueueWithMax<int> max_queue;
+    auto load_array = vector<int>{3, 1, 3, 2, 0};
+    for (auto n : load_array) {
+        max_queue.Enqueue(n);
+    }
+    max_queue.Enqueue(1);
+    max_queue.Dequeue();
+    max_queue.Dequeue();
+    max_queue.Enqueue(2);
+    max_queue.Enqueue(4);
+    max_queue.Dequeue();
+    max_queue.Enqueue(4);
 }
