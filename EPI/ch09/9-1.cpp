@@ -71,6 +71,55 @@ void PostOrder(const unique_ptr<BinaryTreeNode<int>>& root) {
     }
 }
 
+// check if tree is balanced
+
+struct BalancedStatusWithHeight {
+    bool balanced;
+    int height;
+};
+
+
+BalancedStatusWithHeight CheckBalanced(const unique_ptr<BinaryTreeNode<int>>& tree) {
+    if (tree == nullptr) {
+        return {true, -1};
+    }
+    auto left_result = CheckBalanced(tree->left);
+    if (!left_result.balanced) {
+        return {false, 0};
+    }
+    auto right_result = CheckBalanced(tree->right);
+    if (!right_result.balanced) {
+        return {false, 0};
+    }
+    bool is_balanced = abs(left_result.height - right_result.height) <= 1;
+    int height = max(left_result.height, right_result.height) + 1;
+    return {is_balanced, height};
+}
+
+bool isBalanced(const unique_ptr<BinaryTreeNode<int>>& tree) {
+    return CheckBalanced(tree).balanced;
+}
+
+vector<int> tree_data_bal {1, 2, 3, 4, 5, 6, 7};
+auto S = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{tree_data_bal[0], nullptr, nullptr});
+auto T = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{tree_data_bal[1], nullptr, nullptr});
+auto U = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{tree_data_bal[2], nullptr, nullptr});
+auto V = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{tree_data_bal[3], nullptr, nullptr});
+auto W = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{tree_data_bal[4], nullptr, nullptr});
+auto X = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{tree_data_bal[5], nullptr, nullptr});
+auto Y = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{tree_data_bal[6], nullptr, nullptr});
+
+
+void create_bal_tree() {
+   W->right = move(Y);
+   W->left = move(X);
+   T->left = move(U);
+   T->right = move(V);
+   S->left = move(W);
+   S->right = move(T);
+}
+
+
 int main() {
     create_tree();
     cout << "PreOrder : ";
@@ -84,4 +133,8 @@ int main() {
     cout << "PostOrder : ";
     PostOrder(A);
     cout << endl;
+
+    cout << boolalpha << isBalanced(A) << endl;
+    create_bal_tree();
+    cout << boolalpha << isBalanced(S) << endl;
 }
