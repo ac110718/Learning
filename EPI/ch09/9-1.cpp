@@ -119,6 +119,38 @@ void create_bal_tree() {
    S->right = move(T);
 }
 
+vector<int> tree_data_sym {1, 2, 3};
+
+auto b1 = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{tree_data_sym[0], nullptr, nullptr});
+auto b2 = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{tree_data_sym[1], nullptr, nullptr});
+auto b3 = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{tree_data_sym[1], nullptr, nullptr});
+auto b4 = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{tree_data_sym[2], nullptr, nullptr});
+auto b5 = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{tree_data_sym[2], nullptr, nullptr});
+
+void create_sym_tree() {
+    b2->left = move(b4);
+    b3->right = move(b5);
+    b1->left = move(b2);
+    b1->right = move(b3);
+}
+
+// Test if symmetric
+
+bool CheckSymmetric(const unique_ptr<BinaryTreeNode<int>>& subtree_0, const unique_ptr<BinaryTreeNode<int>>& subtree_1) {
+    if (subtree_0 == nullptr && subtree_1 == nullptr) {
+        return true;
+    } else if (subtree_0 != nullptr && subtree_1 != nullptr) {
+        return  subtree_0->data == subtree_1->data &&
+                CheckSymmetric(subtree_0->left, subtree_1->right) &&
+                CheckSymmetric(subtree_0->right, subtree_1->left);
+    }
+    return false; // one is empty, one is not
+}
+
+bool IsSymmetric(const unique_ptr<BinaryTreeNode<int>>& tree) {
+    return tree == nullptr || CheckSymmetric(tree->left, tree->right);
+}
+
 
 int main() {
     create_tree();
@@ -137,4 +169,7 @@ int main() {
     cout << boolalpha << isBalanced(A) << endl;
     create_bal_tree();
     cout << boolalpha << isBalanced(S) << endl;
+    create_sym_tree();
+    cout << IsSymmetric(S) << endl;
+    cout << IsSymmetric(b1) << endl;
 }
