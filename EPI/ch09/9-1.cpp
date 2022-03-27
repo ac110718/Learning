@@ -151,6 +151,36 @@ bool IsSymmetric(const unique_ptr<BinaryTreeNode<int>>& tree) {
     return tree == nullptr || CheckSymmetric(tree->left, tree->right);
 }
 
+// Lowest Common Ancestor. Return first instance of where the two nodes you are looking for are present in the subtree (number exactly 2)
+
+struct Status {
+    int num_target_nodes;
+    BinaryTreeNode<int>* ancestor;
+};
+
+Status LcaHelper(const unique_ptr<BinaryTreeNode<int>>& tree, const unique_ptr<BinaryTreeNode<int>>& node0, const unique_ptr<BinaryTreeNode<int>>& node1) {
+    if (tree == nullptr) {
+        return {0, nullptr};
+    }
+    // will return deepest instance of where target_nodes == 2
+    auto left_result = LcaHelper(tree->left, node0, node1);
+    if (left_result.num_target_nodes == 2) {
+        return left_result;
+    }
+    auto right_result = LcaHelper(tree->right, node0, node1);
+    if (right_result.num_target_nodes == 2) {
+        return right_result;
+    }
+    int num_target_nodes = left_result.num_target_nodes + right_result.num_target_nodes + (tree == node0) + (tree == node1);
+    // will return the first node where num_target_nodes == 2
+    return {num_target_nodes, num_target_nodes == 2 ? tree.get() : nullptr};
+}
+
+
+BinaryTreeNode<int>* Lca (const unique_ptr<BinaryTreeNode<int>>& tree, const unique_ptr<BinaryTreeNode<int>>& node0, const unique_ptr<BinaryTreeNode<int>>& node1) {
+    return LcaHelper(tree, node0, node1).ancestor;
+}
+
 
 int main() {
     create_tree();
@@ -172,4 +202,7 @@ int main() {
     create_sym_tree();
     cout << IsSymmetric(S) << endl;
     cout << IsSymmetric(b1) << endl;
+    cout << Lca(A, A->right->left->right->left->right, A->right->left->right->right)->data << endl;
+    cout << Lca(A, A->right->left->right->left->right, A->left->right->right->left)->data << endl;
+    
 }
