@@ -181,6 +181,51 @@ BinaryTreeNode<int>* Lca (const unique_ptr<BinaryTreeNode<int>>& tree, const uni
     return LcaHelper(tree, node0, node1).ancestor;
 }
 
+// Sum up Binary tree representation where each node is 0 or 1
+
+void make_binary_tree () {
+    vector<int> bin_tree_data {1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0};
+    A = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{bin_tree_data[0], nullptr, nullptr});
+    B = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{bin_tree_data[1], nullptr, nullptr});
+    C = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{bin_tree_data[2], nullptr, nullptr});
+    D = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{bin_tree_data[3], nullptr, nullptr});
+    E = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{bin_tree_data[4], nullptr, nullptr});
+    F = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{bin_tree_data[5], nullptr, nullptr});
+    G = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{bin_tree_data[6], nullptr, nullptr});
+    H = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{bin_tree_data[7], nullptr, nullptr});
+    I = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{bin_tree_data[8], nullptr, nullptr});
+    J = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{bin_tree_data[9], nullptr, nullptr});
+    K = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{bin_tree_data[10], nullptr, nullptr});
+    L = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{bin_tree_data[11], nullptr, nullptr});
+    M = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{bin_tree_data[12], nullptr, nullptr});
+    N = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{bin_tree_data[13], nullptr, nullptr});
+    O = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{bin_tree_data[14], nullptr, nullptr});
+    P = make_unique<BinaryTreeNode<int>>(BinaryTreeNode<int>{bin_tree_data[15], nullptr, nullptr});
+    create_tree();
+}
+
+
+int SumRootToLeafHelper(const unique_ptr<BinaryTreeNode<int>>& tree, int partial_path_sum) {
+    if (tree == nullptr) {
+        return 0;
+    }
+    // calc the accumulated sum up to this point
+    partial_path_sum = partial_path_sum * 2 + tree -> data;
+
+    if (tree->left == nullptr && tree->right == nullptr) {
+        return partial_path_sum;
+    } // end accumulation and return the sum back to parent caller only if leaf
+
+    // request sum for each branch
+    return  SumRootToLeafHelper(tree->left, partial_path_sum) +
+            SumRootToLeafHelper(tree->right, partial_path_sum);
+}
+
+int SumRoomToLeaf(const unique_ptr<BinaryTreeNode<int>>& tree) {
+    return SumRootToLeafHelper(tree, 0);
+}
+
+
 
 int main() {
     create_tree();
@@ -204,5 +249,8 @@ int main() {
     cout << IsSymmetric(b1) << endl;
     cout << Lca(A, A->right->left->right->left->right, A->right->left->right->right)->data << endl;
     cout << Lca(A, A->right->left->right->left->right, A->left->right->right->left)->data << endl;
+    make_binary_tree();
+    int output = 0b1000 + 0b1001 + 0b10110 + 0b110011 + 0b11000 + 0b1100;
+    cout << SumRoomToLeaf(A) << " | " << output << endl;
     
 }
