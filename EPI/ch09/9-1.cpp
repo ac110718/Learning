@@ -225,6 +225,17 @@ int SumRoomToLeaf(const unique_ptr<BinaryTreeNode<int>>& tree) {
     return SumRootToLeafHelper(tree, 0);
 }
 
+bool HasPathSum(const unique_ptr<BinaryTreeNode<int>>& tree, int remaining_weight) {
+    if (tree == nullptr) {
+        return false;
+    } else if (tree->left == nullptr && tree->right == nullptr) {
+        // You're at a leaf, do final check
+        return remaining_weight == tree->data;
+    }
+    return  HasPathSum(tree->left, remaining_weight - tree->data) ||
+            HasPathSum(tree->right, remaining_weight - tree->data);
+}
+
 
 
 int main() {
@@ -249,8 +260,10 @@ int main() {
     cout << IsSymmetric(b1) << endl;
     cout << Lca(A, A->right->left->right->left->right, A->right->left->right->right)->data << endl;
     cout << Lca(A, A->right->left->right->left->right, A->left->right->right->left)->data << endl;
+    cout << "Pathsum 591: " << HasPathSum(A, 591) << endl;
     make_binary_tree();
     int output = 0b1000 + 0b1001 + 0b10110 + 0b110011 + 0b11000 + 0b1100;
     cout << SumRoomToLeaf(A) << " | " << output << endl;
+    
     
 }
