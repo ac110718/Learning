@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <stack>
 
 using namespace std;
 template <typename T>
@@ -236,6 +237,28 @@ bool HasPathSum(const unique_ptr<BinaryTreeNode<int>>& tree, int remaining_weigh
             HasPathSum(tree->right, remaining_weight - tree->data);
 }
 
+// InOrder Traversal using a stack
+
+vector<int> InorderTraversal(const unique_ptr<BinaryTreeNode<int>>& tree) {
+    vector<int> result;
+    stack<pair<const BinaryTreeNode<int>*, bool>> in_process;
+    in_process.emplace(tree.get(), false); // bool is left traversed and therefore node can be added?
+    while (!empty(in_process)) {
+        auto [node, left_subtree_traversed] = in_process.top();
+        in_process.pop();
+        if (node) {
+            if (left_subtree_traversed) {
+                result.emplace_back(node->data);
+            } else {
+                in_process.emplace(node->right.get(), false); // right will be processed last and buried in the stack
+                in_process.emplace(node, true); // add to result next time around now that children are in_process
+                in_process.emplace(node->left.get(), false); // left will be top of stack and processed first 
+            }
+        }
+    }
+    return result;
+}
+
 
 
 int main() {
@@ -248,10 +271,17 @@ int main() {
     InOrder(A);
     cout << endl;
 
+    auto stack_inorder = InorderTraversal(A);
+    cout << "InOrder : ";
+    for (auto n : stack_inorder) {
+        cout << n << ", ";
+    }
+    cout << endl;
+
     cout << "PostOrder : ";
     PostOrder(A);
     cout << endl;
-
+    
     cout << boolalpha << isBalanced(A) << endl;
     create_bal_tree();
     cout << boolalpha << isBalanced(S) << endl;
