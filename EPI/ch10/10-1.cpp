@@ -58,8 +58,33 @@ vector<int> MergeSortedArrays(const vector<vector<int>>& sorted_arrays) {
     return result;
 }
 
+// sort array that goes monotonically up and down k times. 
+// reverse when you hit decreasing subseries and merge the subarrays per above
+
+vector<int> SortKIncreasingDecreasingArray(const vector<int>& A) {
+    vector<vector<int>> sorted_subarrays; // processing list
+    typedef enum { kIncreasing, kDecreasing } SubarrayType;
+    SubarrayType subarray_type = kIncreasing;
+    int start_idx = 0;
+    // do nothing and push through i until you hit a kink.. then add the subarray to processing list
+    for (int i = 1; i <= size(A); i++) {
+        if (i == size(A) || A[i-1] < A[i] && subarray_type == kDecreasing || A[i-1] > A[i] && subarray_type == kIncreasing) {
+            // add subarrays
+            if (subarray_type == kIncreasing) {
+                sorted_subarrays.emplace_back(cbegin(A) + start_idx, cbegin(A) + i);
+            } else {
+                // place in reverse iterators
+                sorted_subarrays.emplace_back(crbegin(A) + size(A) - i, crbegin(A) + size(A) - start_idx);
+            }
+            start_idx = i; // reset the new starting point
+            subarray_type = subarray_type == kIncreasing ? kDecreasing : kIncreasing; // switch type
+        }
+    }
+    return MergeSortedArrays(sorted_subarrays); // use helper function per above
+}
+
 int main() {
-    
+
     vector<string> string_vec = {"abc", "def", "something", "another", "a", "b", "testing", "reallyreallylongword"};
     auto output = TopK(3, string_vec.begin(), string_vec.end());
     for (auto word : output) {
@@ -70,6 +95,13 @@ int main() {
     vector<vector<int>> sorted_lists = {{0, 0, 1, 3, 4, 8}, {1, 5, 8, 9}, {6, 6, 7}};
     auto output_1 = MergeSortedArrays(sorted_lists);
     for (auto n : output_1) {
+        cout << n << ", ";
+    }
+    cout << endl;
+
+    vector<int> sorted_k_inc_dec = {57, 131, 493, 294, 221, 339, 418, 452, 442, 190};
+    auto output_2 = SortKIncreasingDecreasingArray(sorted_k_inc_dec);
+    for (auto n : output_2) {
         cout << n << ", ";
     }
     cout << endl;
