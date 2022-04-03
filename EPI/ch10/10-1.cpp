@@ -83,6 +83,31 @@ vector<int> SortKIncreasingDecreasingArray(const vector<int>& A) {
     return MergeSortedArrays(sorted_subarrays); // use helper function per above
 }
 
+// sort an "almost sorted" list of numbers that is at most k positions away from final sorted order
+// use a heap of k+1 size to store a window of numbers. Pull from the top to put into final list
+// guaranteed that within k+1 window the min will be found in the heap
+
+vector<int> SortApproximatelySortedData(vector<int>::const_iterator sequence_begin, const vector<int>::const_iterator& sequence_end, int k) {
+    priority_queue<int, vector<int>, greater<>> min_heap;
+    // load the heap
+    for (int i = 0; i < k && sequence_begin != sequence_end; ++i) {
+        min_heap.push(*sequence_begin++);
+    }
+    vector<int> result;
+    // start extracting and replenishing
+    while (sequence_begin != sequence_end) {
+        min_heap.push(*sequence_begin++);
+        result.push_back(min_heap.top());
+        min_heap.pop();
+    }
+    // flush the heap buffer
+    while (!empty(min_heap)) {
+        result.push_back(min_heap.top());
+        min_heap.pop();
+    }
+    return result;
+}
+
 int main() {
 
     vector<string> string_vec = {"abc", "def", "something", "another", "a", "b", "testing", "reallyreallylongword"};
@@ -102,6 +127,13 @@ int main() {
     vector<int> sorted_k_inc_dec = {57, 131, 493, 294, 221, 339, 418, 452, 442, 190};
     auto output_2 = SortKIncreasingDecreasingArray(sorted_k_inc_dec);
     for (auto n : output_2) {
+        cout << n << ", ";
+    }
+    cout << endl;
+
+    vector<int> approx_sort = {3, -1, 2, 6, 4, 5, 8};
+    auto output_3 = SortApproximatelySortedData(approx_sort.begin(), approx_sort.end(), 2);
+    for (auto n : output_3) {
         cout << n << ", ";
     }
     cout << endl;
