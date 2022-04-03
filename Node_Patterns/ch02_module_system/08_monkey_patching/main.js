@@ -1,0 +1,5 @@
+require('./patcher')
+const logger = require('./logger')
+logger.log("hello1")
+logger.customMessage()
+logger.log("hello2")
