@@ -1,0 +1,16 @@
+{
+  "name": "10_writable_entropy_backpressure",
+  "version": "1.0.0",
+  "description": "",
+  "main": "entropy_server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chance": "^1.1.4"
+  }
+}
