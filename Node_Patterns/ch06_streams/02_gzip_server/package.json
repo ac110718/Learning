@@ -1,0 +1,18 @@
+{
+  "name": "02_gzip_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gzip_receive.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mkdirp": "^0.5.1",
+    "request": "^2.88.0",
+    "slug": "^1.1.0"
+  }
+}
