@@ -1,0 +1,353 @@
+Traverse three tabless.. customer -> address -> city with two join statements. 
+First, on customer.address_id = address.address_id and then on address.city_id = city.city_id
+
+SELECT c.first_name, c.last_name, ct.city
+FROM customer c
+    INNER JOIN address a
+    ON c.address_id = a.address_id
+    INNER JOIN city ct
+    ON a.city_id = ct.city_id;
+
+Using subqueries as tables...
+Find all addresses that are in California..
+Find customers that match those addresses
+
+SELECT c.first_name, c.last_name, addr.address, addr.city
+FROM customer c
+    INNER JOIN
+        (SELECT a.address_id, a.address, ct.city
+         FROM address a
+            INNER JOIN city ct
+            ON a.city_id = ct.city_id
+         WHERE a.district = 'California'
+        ) addr
+    ON c.address_id = addr.address_id;
+
+Using the same table twice..
+Find film that has both actors appearing.. you will need one table for each actor and merge them
+film_actor table is just a cross match between films (which contains film names) and actors (with actor info)
+So will need both to pull in the film titles and correlate back to actor actual names
+Below query produces two tables of titles.. one for each actor
+
+SELECT f.title
+    FROM film f
+        INNER JOIN film_actor fa1
+        ON f.film_id = fa1.film_id
+        INNER JOIN actor a1
+        ON fa1.actor_id = a1.actor_id
+        INNER JOIN film_actor fa2
+        on f.film_id = fa.film_id
+        INNER JOIN actor a2
+        ON fa2.actor_id = a2.actor_id
+    WHERE (a1.first_name = 'CATE' and a1.last_name = 'MCQUEEN')
+    AND   (a2.first_name = 'CUBA' AND a2.last_name = 'BIRCH');
+
+WHERE filters out raw data before you manipulate with aggregate functions
+HAVING filters out aggregates after you have run the GROUP BY
+
+Multicolumn group
+Suppose you want to see the count for each actor AND for each possible rating..
+
+SELECT fa.actor_id, f.rating, count(*)
+    FROM film_actor fa
+        INNER JOIN film f
+        ON fa.film_id = f.film_id
+    GROUP BY fa.actor_id, f.rating
+    ORDER BY 1, 2;
+
+SELECT extract(YEAR FROM rental_date) year,
+    COUNT(*) how_many
+    FROM rental
+    GROUP BY extract(YEAR FROM rental_date);
+
+Use WITH ROLLUP to generate subtotals along with the total
+
+SELECT fa.actor_id, f.rating, count(*)
+    FROM film_actor fa
+        INNER JOIN film f
+        ON fa.film_id = f.film_id
+    GROUP BY fa.actor_id, f.rating WITH ROLLUP
+    ORDER BY 1, 2;
+
+SELECT fa.actor_id, f.rating, count(*)
+FROM film_actor fa
+    INNER JOIN film f
+    ON fa.film_id = f.film_id
+WHERE f.rating IN ('G', 'PG')
+GROUP BY fa.actor_id, f.rating
+HAVING count(*) > 9;
+
+ANY operator.. find all customers who outspent at least one of the three countries (Bolivia, Paraguay, Chile)
+
+SELECT customer_id, sum(amount)
+FROM payment
+GROUP BY customer_id
+HAVING sum(amount) > ANY
+    (SELECT sum(p.amount)
+     FROM payment p
+        INNER JOIN customer c
+        ON p.customer_id = c.customer_id
+        INNER JOIN address a
+        ON c.address_id = a.address_id
+        INNER JOIN city ct
+        ON ct.city_id = a.city_id
+        INNER JOIN country co
+        ON ct.country_id = co.country_id
+     WHERE co.country IN ('Bolivia', 'Paraguay', 'Chile')
+     GROUP BY co.country
+    );
+
+Correlated subqueries.. subquery is calculated once for each candidate row
+
+SELECT c.first_name, c.last_name
+FROM customer c
+WHERE 20 =
+    (SELECT count(*) FROM rental r WHERE r.customer_id = c.customer_id);
+
+SELECT c.first_name, c.last_name
+FROM customer c
+WHERE
+    (SELECT sum(p.amount) FROM payment p
+     WHERE p.customer_id = c.customer_id)
+    BETWEEN 180 AND 240;
+
+CONDITIONALS
+
+SELECT c.first_name, c.last_name,
+    CASE
+        WHEN active = 0 THEN 0
+        ELSE
+        (SELECT count(*) FROM rental r
+         WHERE r.customer_id = c.customer_id)
+    END num_rentals
+    FROM customer c;
+
+RESULT TRANSFORMATIONS
+
+SELECT monthname(rental_date) rental_month, count(*) num_rentals
+FROM rental
+WHERE rental_date BETWEEN '2005-05-01' AND '2005-08-01'
+GROUP BY monthname(rental_date);
+
+SELECT SUM(CASE WHEN monthname(rental_date) = 'May' THEN 1 ELSE 0 END) May_rentals,
+       SUM(CASE WHEN monthname(rental_date) = 'June' THEN 1 ELSE 0 END) June_rentals,
+       SUM(CASE WHEN monthname(rental_date) = 'July' THEN 1 ELSE 0 END) July_rentals
+FROM rental
+WHERE rental_date BETWEEN '2005-05-01' AND '2005-08-01';
+
+CHECKING FOR EXISTENCE
+
+SELECT a.first_name, a.last_name,
+    CASE
+        WHEN EXISTS (SELECT 1 FROM film_actor fa INNER JOIN film f on fa.film_id = f.film_id
+                     WHERE fa.actor_id = a.actor_id AND f.rating = 'G') THEN 'Y' ELSE 'N'
+    END g_actor,
+    CASE
+        WHEN EXISTS (SELECT 1 FROM film_actor fa INNER JOIN film f on fa.film_id = f.film_id
+                     WHERE fa.actor_id = a.actor_id AND f.rating = 'PG') THEN 'Y' ELSE 'N'
+    END pg_actor,
+    CASE
+        WHEN EXISTS (SELECT 1 FROM film_actor fa INNER JOIN film f on fa.film_id = f.film_id
+                     WHERE fa.actor_id = a.actor_id AND f.rating = 'NC-17') THEN 'Y' ELSE 'N'
+    END nc17_actor
+FROM actor a
+WHERE a.last_name LIKE 'S%' or a.first_name LIKE 'S%';
+
+SELECT f.title,
+    CASE (SELECT count(*) FROM inventory i WHERE i.film_id = f.film_id)
+        WHEN 0 Then 'Out of stock'
+        WHEN 1 Then 'Scarce'
+        WHEN 2 Then 'Scarce'
+        WHEN 3 Then 'Available'
+        WHEN 4 THen 'Available'
+        ELSE 'Common'
+    END film_availability
+FROM film f;
+
+ANALYTIC functions
+
+SELECT quarter(payment_date) quarter, monthname(payment_date) month_nm, sum(amount) monthly_sales
+FROM payment
+WHERE year(payment_date) = 2005
+GROUP BY quarter(payment_date), monthname(payment_date);
+
+Generate the max sum over SET containing all rows in the SAME quarter
+
+SELECT 
+    quarter(payment_date) quarter,
+    monthname(payment_date) month_nm,
+    sum(amount) monthly_sales,
+    max(sum(amount)) over () max_overall_sales,
+    max(sum(amount)) over (partition by quarter(payment_date)) max_qrtr_sales
+FROM payment
+WHERE year(payment_date) = 2005
+GROUP BY quarter(payment_date), monthname(payment_date);
+
+Localized sorting...
+
+SELECT
+    quarter(payment_date) quarter,
+    monthname(payment_date) month_nm,
+    sum(amount) monthly_sales,
+    rank() over (order by sum(amount) desc) sales_rank
+FROM payment
+WHERE year(payment_date) = 2005
+GROUP BY quarter(payment_date), monthname(payment_date)
+ORDER BY 1, 2;
+
+Rank within a partitioned quarter
+
+SELECT 
+    quarter(payment_date) quarter,
+    monthname(payment_date) month_nm,
+    sum(amount) monthly_sales,
+    rank() over (partition by quarter(payment_date) order by sum(amount) desc) qtr_sales_rank
+FROM payment
+WHERE year(payment_date) = 2005
+GROUP BY quarter(payment_date), monthname(payment_date)
+ORDER BY 1, 2;
+
+dense_rank (no skipping), rank (skipping), row number (randomly assigned tie_breaker)
+
+SELECT 
+    customer_id, 
+    count(*) num_rentals,
+    row_number() over (order by count(*) desc) row_number_rnk,
+    rank() over (order by count(*) desc) rank_rnk,
+    dense_rank() over (order by count(*) desc) dense_rank_rnk
+FROM rental
+GROUP BY customer_id
+ORDER BY 2 desc;
+
+SELECT 
+    customer_id,
+    monthname(rental_date) rental_month,
+    count(*) num_rentals,
+    rank() over (partition by monthname(rental_date) order by count(*) desc) rank_rnk
+FROM rental
+GROUP BY customer_id, monthname(rental_date)
+ORDER BY 2, 3 desc;
+
+SELECT
+    customer_id,
+    rental_month,
+    num_rentals,
+    rank_rnk ranking
+FROM
+    (SELECT 
+        customer_id,
+        monthname(rental_date) rental_month,
+        count(*) num_rentals,
+        rank() over (partition by monthname(rental_date) order by count(*) desc) rank_rnk
+     FROM rental
+     GROUP BY customer_id, monthname(rental_date)
+    ) cust_rankings
+WHERE rank_rnk <= 5
+ORDER BY rental_month, num_rentals desc, rank_rnk;
+
+REPORTING functions
+
+SELECT 
+    monthname(payment_date) payment_month,
+    amount,
+    sum(amount) over (partition by monthname(payment_date)) monthly_total,
+    sum(amount) over () grand_total
+FROM payment
+WHERE amount >= 10
+ORDER BY 1;
+
+SELECT 
+    monthname(payment_date) payment_month,
+    sum(amount) monthly_total,
+    round(sum(amount) / sum(sum(amount)) over () * 100, 2) pct_of_total
+FROM payment
+GROUP BY monthname(payment_date);
+
+SELECT 
+    monthname(payment_date) payment_month,
+    sum(amount) month_total,
+    CASE sum(amount)
+        WHEN max(sum(amount)) over () THEN 'Highest'
+        WHEN min(sum(amount)) over () THEN 'Lowest'
+        ELSE 'Middle'
+    END descriptor
+FROM payment
+GROUP BY monthname(payment_date);
+
+WINDOW FRAMES.. use a "frame" subclause to define exactly which rows to include in the data WINDOW
+
+Rolling weekly sum
+
+SELECT 
+    yearweek(payment_date) payment_week,
+    sum(amount) week_total,
+    sum(sum(amount)) over (order by yearweek(payment_date) rows unbounded preceding) rolling_sum
+FROM payment
+GROUP BY yearweek(payment_date)
+ORDER BY 1;
+
+Rolling three-week average
+
+SELECT
+    yearweek(payment_date) payment_week,
+    sum(amount) week_total,
+    avg(sum(amount)) over (order by yearweek(payment_date) rows between 1 preceding and 1 following) rolling_3wk_avg
+FROM payment
+GROUP BY yearweek(payment_date)
+ORDER BY 1;
+
+Can also specify by data range rather than by number of rows
+
+SELECT
+    date(payment_date),
+    sum(amount),
+    avg(sum(amount)) over (order by date(payment_date) range between interval 3 day preceding and interval 3 day following) 7_day_avg
+FROM payment
+WHERE payment_date BETWEEN '2005-07-01' and '2005-09-01'
+GROUP BY date(payment_date)
+ORDER BY 1;
+
+lagging and leading functions (retrieve data from prior row)
+
+SELECT
+    yearweek(payment_date) payment_week,
+    sum(amount) week_total,
+    lag(sum(amount), 1) over (order by yearweek(payment_date)) prev_week_tot,
+    lead(sum(amount), 1) over (order by yearweek(payment_date)) next_week_tot
+FROM payment
+GROUP BY yearweek(payment_date)
+ORDER BY 1;
+
+SELECT 
+    yearweek(payment_date) payment_week,
+    sum(amount) week_total,
+    round((sum(amount) - lag(sum(amount), 1) over (order by yearweek(payment_date)))
+         / lag (sum(amount), 1) over (order by yearweek(payment_date)) * 100, 1) pct_diff
+FROM payment
+GROUP BY yearweek(payment_date)
+ORDER BY 1;
+
+COLUMN VALUE CONCATENATION
+
+SELECT
+    f.title,
+    group_concat(a.last_name order by a.last_name separator ', ') actors
+FROM actor a
+    INNER JOIN film_actor fa
+    ON a.actor_id = fa.actor_id
+    INNER JOIN film f
+    ON fa.film_id = f.film_id
+GROUP BY f.title
+HAVING count(*) = 3;
+
+Disaggregated version...
+
+SELECT
+    f.title,
+    a.last_name
+FROM actor a
+    INNER JOIN film_actor fa
+    ON a.actor_id = fa.actor_id
+    INNER JOIN film f
+    ON fa.film_id = f.film_id;
+
