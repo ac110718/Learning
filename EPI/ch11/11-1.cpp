@@ -57,6 +57,23 @@ int SearchFirstOfK(const vector<int>& A, int k) {
     return result;
 }
 
+// search sorted array for entry equal to its index
+
+int SearchEntryEqualToItsIndex (const vector<int>& A) {
+    int left = 0, right = size(A) - 1;
+    while (left <= right) {
+        int mid = left + ((right + left) / 2);
+        if (int difference = A[mid] - mid; difference == 0) {
+            return mid;
+        } else if (difference > 0) {
+            right = mid - 1;
+        } else {
+            left = mid + 1;
+        }
+    }
+    return -1;
+}
+
 int main() {
     auto search = vector<int>{1, 3, 5, 6, 7, 8, 9};
     cout << bsearch(6, search) << endl;
@@ -66,4 +83,6 @@ int main() {
     cout << boolalpha << SearchStudent(student_vec, n, CompGPA) << endl;
     vector<int> sorted_array = {-14, -10, 2, 108, 108, 243, 285, 285, 285, 401};
     cout << SearchFirstOfK(sorted_array, 285) << ", " << SearchFirstOfK(sorted_array, 108) << endl;
+    vector<int> sorted_array_1 = {-2, 0, 2, 3, 6, 7, 9};
+    cout << SearchEntryEqualToItsIndex(sorted_array_1) << endl;
 }
