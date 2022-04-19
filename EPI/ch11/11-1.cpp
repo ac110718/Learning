@@ -62,7 +62,7 @@ int SearchFirstOfK(const vector<int>& A, int k) {
 int SearchEntryEqualToItsIndex (const vector<int>& A) {
     int left = 0, right = size(A) - 1;
     while (left <= right) {
-        int mid = left + ((right + left) / 2);
+        int mid = left + ((right - left) / 2);
         if (int difference = A[mid] - mid; difference == 0) {
             return mid;
         } else if (difference > 0) {
@@ -72,6 +72,22 @@ int SearchEntryEqualToItsIndex (const vector<int>& A) {
         }
     }
     return -1;
+}
+
+// search the min of a cyclically sorted array
+// if A[m] > A[size], the kink (or min) must be in right half. 
+// if A[m] < A[size], the kink (or min) must be in left half
+
+int SearchSmallest(const vector<int>& A) {
+    int left = 0, right = size(A) - 1;
+    while (left < right) {
+        if (int mid = left + ((right - left) / 2); A[mid] > A[right]) {
+            left = mid + 1; // search right half, where kink is
+        } else {
+            right = mid; // search left half, where kink is. Right half is continuously increasing range.
+        }
+    }
+    return left;
 }
 
 int main() {
@@ -85,4 +101,6 @@ int main() {
     cout << SearchFirstOfK(sorted_array, 285) << ", " << SearchFirstOfK(sorted_array, 108) << endl;
     vector<int> sorted_array_1 = {-2, 0, 2, 3, 6, 7, 9};
     cout << SearchEntryEqualToItsIndex(sorted_array_1) << endl;
+    vector<int> sorted_array_cyclical = {378, 478, 550, 631, 103, 203, 220, 234, 279, 368};
+    cout << SearchSmallest(sorted_array_cyclical) << endl;
 }
