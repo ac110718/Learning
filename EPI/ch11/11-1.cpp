@@ -90,6 +90,21 @@ int SearchSmallest(const vector<int>& A) {
     return left;
 }
 
+int SquareRoot(int k) {
+    int left = 0, right = k;
+    while (left <= right) {
+        cout << "left: " << left << " | " << "right: " << right << endl;
+        long long mid = left + ((right - left) / 2);
+        if (long long mid_squared = mid * mid; mid_squared <= k) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    cout << "answer: " << left - 1 << endl;
+    return left - 1;
+}
+
 int main() {
     auto search = vector<int>{1, 3, 5, 6, 7, 8, 9};
     cout << bsearch(6, search) << endl;
@@ -103,4 +118,5 @@ int main() {
     cout << SearchEntryEqualToItsIndex(sorted_array_1) << endl;
     vector<int> sorted_array_cyclical = {378, 478, 550, 631, 103, 203, 220, 234, 279, 368};
     cout << SearchSmallest(sorted_array_cyclical) << endl;
+    SquareRoot(145);
 }
