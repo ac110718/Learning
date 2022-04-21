@@ -105,6 +105,38 @@ int SquareRoot(int k) {
     return left - 1;
 }
 
+// find floating point square root
+
+typedef enum { kSmaller, kEqual, kLarger } Ordering;
+
+Ordering Compare(double a, double b) {
+    double diff = (a - b) / max(abs(a), abs(b));
+    return diff < -numeric_limits<double>::epsilon() ? kSmaller :
+        diff > numeric_limits<double>::epsilon() ? kLarger : kEqual;
+}
+
+double SquareRoot(double x) {
+    double left, right;
+    if (x < 1.0) {
+        left = x, right = 1.0;
+    } else {
+        left = 1.0, right = x;
+    }
+
+    while (Compare(left, right) != kEqual) {
+        double mid = left + 0.5 * (right - left);
+        if (double mid_squared = mid * mid; Compare(mid_squared, x) == kLarger) {
+            right = mid;
+        } else {
+            left = mid;
+        }
+        cout << "left : " << left << " | " << "right : " << right << endl;
+    }
+    cout << "answer : " << left;
+    return left;
+}
+
+
 int main() {
     auto search = vector<int>{1, 3, 5, 6, 7, 8, 9};
     cout << bsearch(6, search) << endl;
@@ -119,4 +151,5 @@ int main() {
     vector<int> sorted_array_cyclical = {378, 478, 550, 631, 103, 203, 220, 234, 279, 368};
     cout << SearchSmallest(sorted_array_cyclical) << endl;
     SquareRoot(145);
+    SquareRoot(145.0);
 }
