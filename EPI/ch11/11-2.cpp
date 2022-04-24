@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <random>
 
 using namespace std;
 
@@ -57,9 +58,65 @@ MinMax FindMinMax(const vector<int>& A) {
 
 vector<int> min_max_vec = {3, 2, 5, 1, 2, 4, -1, 2, 2, 6, 6, 9, -10};
 
+// Find Kth largest element
+// Brute Force sorting is wasteful as you only want kth largest element
+// So is using a heap, as you'd find k, k-1, k-2.. etc largest elements
+// Partitioning is most efficient method
+
+// Keep partitioning at random points to find k elements greater than index
+// On average, you should be eliminating half the points on each search
+// if you overshoot.. use "binary search" to partition again but only with either left half or right half
+
+
+// need to input expact left and right boundaries as parent function will be doing subsearch
+template <typename Compare>
+int PartitionAroundPivot(int left, int right, int pivot_idx, Compare comp, vector<int>* A_ptr) {
+    vector<int>& A = *A_ptr;
+    int pivot_value = A[pivot_idx];
+    int new_pivot_idx = left; // track partition boundary with index pointer
+    swap(A[pivot_idx], A[right]); // put partition element off to side
+    for (int i = left; i < right; ++i) {
+        if (comp(A[i], pivot_value)) {
+            swap(A[i], A[new_pivot_idx++]); // bring A[i] to left partition and bump up index pointer
+        } // in the end, all elements left of index pointer will be smaller
+    } // bring the pivot element back to correct positioning (had been moved off to side)
+    swap(A[right], A[new_pivot_idx]);
+    return new_pivot_idx;
+}
+
+template<typename Compare>
+int FindKth(int k, Compare comp, vector<int>* A_ptr) {
+    vector<int>& A = *A_ptr;
+    int left = 0, right = size(A) - 1;
+    default_random_engine gen((random_device())());
+    while (left <= right) {
+        // find random partitioning starting point (on average elements half bigger, half smaller in long run), within left right bounds
+        int pivot_idx = uniform_int_distribution<int>{left, right}(gen);
+        cout << "left : " << left << " | right : " << right << " | part_element: " << A[pivot_idx] << endl;
+        if (int new_pivot_idx = PartitionAroundPivot(left, right, pivot_idx, comp, &A); new_pivot_idx == k - 1) {
+            cout << "FOUND : " << A[new_pivot_idx] << " at index " << new_pivot_idx << endl;
+            return A[new_pivot_idx];
+        } else if (new_pivot_idx > k - 1) {
+            right = new_pivot_idx - 1;
+        } else {
+            left = new_pivot_idx + 1;
+        }
+    }
+    cout << "Not Found" << endl;
+    return -1000000;
+}
+
+int FindKthLargest(int k, vector<int>* A_ptr) {
+    return FindKth(k, greater<int>(), A_ptr);
+}
+
 int main() {
     MatrixSearch(twoD_array, 3);
     MatrixSearch(twoD_array, 11);
     auto result = FindMinMax(min_max_vec);
     cout << "smallest: " << result.smallest << " | largest : " << result.largest << endl;
+    FindKthLargest(1, &k_search);
+    FindKthLargest(2, &k_search);
+    FindKthLargest(3, &k_search);
+    FindKthLargest(4, &k_search);
 }
