@@ -46,6 +46,32 @@ bool CanFormPalindrome(const string& s) {
     return size(chars_with_odd_frequency) <= 1;
 }
 
+// Is anonymous letter constructible? letter characters must be subset of magazine characters
+// Increment character count while processing letter text. Decrement as you read through magazine. End when depleted
+
+bool IsLetterConstructibleFromMagazine(const string& letter_text, const string& magazine_text) {
+    unordered_map<char, int> char_frequency_letter;
+    for (char c: letter_text) {
+        ++char_frequency_letter[c];
+    }
+    for (char c: magazine_text) {
+        if (auto it = char_frequency_letter.find(c); it != cend(char_frequency_letter)) {
+            --it->second;
+            if (it->second == 0) {
+                char_frequency_letter.erase(it);
+                if (empty(char_frequency_letter)) {
+                    break; // All characters for letter have been matched
+                }
+            }
+        }
+    }
+    return empty(char_frequency_letter);
+}
+
+string mag_text = "keyboard shortcuts for vim are great. they will improve productivity";
+string let_text = "i ate you";
+string false_text = "zero chance";
+
 int main() {
     auto result = FindAnagrams(input);
     for (auto vec : result) {
@@ -59,5 +85,6 @@ int main() {
     string not_palindrome = "foobaraboof3aosidjasd";
     cout << palindrome << boolalpha << " | " << CanFormPalindrome(palindrome) << endl;
     cout << not_palindrome << boolalpha << " | " << CanFormPalindrome(not_palindrome) << endl;
+    cout << IsLetterConstructibleFromMagazine(let_text, mag_text) << " | " << IsLetterConstructibleFromMagazine(false_text, mag_text) << endl;
 }
 
