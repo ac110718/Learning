@@ -1,1 +1,0 @@
-/Users/allenchan/Github/Learning/Rust/ch03_fundamental_types/fundamental_types/target/debug/fundamental_types: /Users/allenchan/Github/Learning/Rust/ch03_fundamental_types/fundamental_types/src/main.rs
