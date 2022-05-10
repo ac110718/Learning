@@ -1,1 +1,0 @@
-/Users/allenchan/Github/Learning/Rust/04_ownership_and_moves/ownership_and_moves/target/debug/ownership_and_moves: /Users/allenchan/Github/Learning/Rust/04_ownership_and_moves/ownership_and_moves/src/main.rs
