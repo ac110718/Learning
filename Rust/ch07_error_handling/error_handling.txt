@@ -1,0 +1,59 @@
+Rust has two types of errors: panic and Results.
+Panic is for things that should never happen (i.e. from within the application). Out-of-bounds, division by zero, assertion error.
+calling .expect() on a result that is Err will panic.
+Panic is per thread. There's also a way to catch the stack unwinging, allowing thread to survive and continue.. under std::panic::catch_unwind()
+
+Results represent problems caused by things outside the program like erroneous input, a network outage, or permissions problem.
+Even bug-free programs will encounter such errors.
+
+Functions that can fail have a return type that says so
+fn get_weather(location: LatLng) -> Result<WeatherReport, io::Error>
+returns either a success result Ok(weather) where weather is WeatherReport type..
+or error result Err(error_value), where io::Error explains what went wrong.
+
+match expression on Result is equivalent to try/catch
+
+match get_weather(hometown) {
+    Ok(report) => {
+        display_weather(hometown, &report);
+    }
+    Err(err) => {
+        println!("error querying the weather: {}", err);
+        schedule_weather_retry();
+    }
+}
+
+result.is_ok(), result.is_err() | returns bool telling if result is success or error
+result.ok() returns Option<T> that is either Some(success_valiue), or None
+result.err() returns Option<E> with error as return value, if any.
+
+result.unwrap_or(fallback)
+const THE_USUAL: WeatherReport = WeatherReport::Sunny(72);
+let report = get_weather(los_angeles).unwrap_or(THE_USUAL); Return is not Option<T>, but always T
+display_report(los_angeles, &report);
+
+result.unwrap_or_else(fallback_fn)
+Rather than passing fallback value direction, you pass in function or closure.
+let report = get_weather(hometown).unwrap_or_else(|_err| vague_prediction(hometown))
+
+result.unwrap() returns success value, but if error then panic
+result.expect(message) same as unwrap, but provide message to print in case panic
+
+result.as_ref() returns Result<&T, &E> so that calling any of the above functions (including .is_ok()) don't consume Result
+result.as_ref().ok() borrows result, returning an Option<&T> rather than an Option<T>
+
+sometimes will see Result<()> but it's actually using a type alias
+Similarly, some libraries type alias pub type Result<T> = result::Result<T, Error> for shorthand to avoid repetition of E. Like Result<String> to mean Result<String, io::Error>
+
+print error usint println!() but with {:?} you can show Debug view
+writeln! works like println! but with a first parameter that takes a write stream.. like writeln!(stderr(), "caused by: {}", source);
+
+Rather than handling errors immediately around every corner, we usually want to let our caller deal with the error, and propagate up the call stack
+use the ? operator to do this.. use a ? to any expression that produces a Result
+on success ? unwraped Result to get the successvalue.. WeatherReport
+on error, it immediately returns, passing error result up the call chain
+
+Sometimes you have many error types, with high specifity.. but program expects a more generic error type
+Can do GenericError::from(io_error);
+
+unwrap or expect(message) causes a panic when you truly believe that an error cannot happen
