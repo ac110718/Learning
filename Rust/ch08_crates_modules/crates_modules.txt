@@ -1,0 +1,34 @@
+Crates are about code sharing between projects
+Modules are about code organization within a project. Act as namespace
+pub keyword makes an item public, so it can be accessed from outside the module.
+pub(crate) makes available anywhere inside crate, but isn't exposed a part of the external interface.
+Anything that isn't marked pub is private and can only be used in same module in which it is defined
+pub(super) makes item visible to the parent module only
+
+module can have its own directory. Import using mod spores; 
+File can be either in spores.rs, or spores/mod.rs Error if neither, or both exist.
+Use directory option if there are submodules. Within the parent module, declare the submodules... 
+which need to be located alongside mod.rs in the plant_structure directory
+
+:: operator is used to access features of a module
+std::mem::swap | std = top-level module | std::mem = submodule within standard library | std::mem::swap is a public function in module
+'use' declaration causes name mem to be  a local alias for std::mem throughout enclosing block or module
+
+use std::collections::{HashMap, HashSet};   // import both
+use std::fs::{self, File};                  // import std::fs and std::fs::File
+use std::io::prelude::*                     // import everything
+
+submodules can access private items in parent modules with use super::*
+keywords super and crate have special references (parent and root)
+
+everything automatically include use stdd::prelude::v1::* that gives you Vec, Result, etc
+
+Attributes are catchall syntax for writing miscellaneous instructions and advice to the compiler.
+#[allow(non_camel_case_types)] on a struct
+#[cfg(target_os="android")] conditional compilation
+#[test] unit testing
+#[cfg(test)] include this module only when testing
+
+/// indicates doc comments
+
+
