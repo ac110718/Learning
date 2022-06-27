@@ -9,3 +9,5 @@ Recommender systems help users discover the long tail.
 When trying to optimize for diversity over accuracy, you can try to separate out by category specific recommendations, and then within that set of content, set a ranking.
 
 Recommendations could be based on specific time of day (Sunday mornings vs. evenings), or particular context (device, geo), or boost "freshness" with a time decay ranking algorithm
+
+Collaborative filtering employs *usage* data, while content-based filtering employs content metadata and user profiles. A mix of these two is called hybrid recommenders.
