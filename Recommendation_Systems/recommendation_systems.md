@@ -11,3 +11,11 @@ When trying to optimize for diversity over accuracy, you can try to separate out
 Recommendations could be based on specific time of day (Sunday mornings vs. evenings), or particular context (device, geo), or boost "freshness" with a time decay ranking algorithm
 
 Collaborative filtering employs *usage* data, while content-based filtering employs content metadata and user profiles. A mix of these two is called hybrid recommenders.
+
+Collaborative filtering needs much feedback from users to work properly while content-based filtering needs good descriptions of the items.
+
+## Chapter 2
+
+Events and behaviors need to be collected to provide an indication of users tastes. Mouseovers and detail views are strong indications of interest.
+
+Timing is tricky. If you leave immediately and never come back, it's a strong sign of disinterest, but if you come back it's the exact opposite.
