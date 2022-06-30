@@ -21,3 +21,5 @@ Events and behaviors need to be collected to provide an indication of users tast
 Timing is tricky. If you leave immediately and never come back, it's a strong sign of disinterest, but if you come back it's the exact opposite.
 
 sites with high user involvement enable the site owner to collect large amounts of relevant data, whereas sites with mostly one-time visitors need to focus on relationships among the content instead.
+
+What determines an effective recommendation system? Don't go by simplistic metrics like "engagement" because user could be lost. You do NOT want slow and low conversion (wandering around lots of pages), you want fast and HIGH conversion (on target immediately). 
