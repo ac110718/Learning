@@ -23,3 +23,5 @@ Timing is tricky. If you leave immediately and never come back, it's a strong si
 sites with high user involvement enable the site owner to collect large amounts of relevant data, whereas sites with mostly one-time visitors need to focus on relationships among the content instead.
 
 What determines an effective recommendation system? Don't go by simplistic metrics like "engagement" because user could be lost. You do NOT want slow and low conversion (wandering around lots of pages), you want fast and HIGH conversion (on target immediately). 
+
+Allowing users to have a small sense of control or contribution towards progress can go a long way (allow subselection of recommendations, etc). Add eggs to cakebatter dramatically boosted sales from just add water.
