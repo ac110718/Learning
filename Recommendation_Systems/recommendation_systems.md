@@ -30,4 +30,4 @@ Allowing users to have a small sense of control or contribution towards progress
 
 User-item matrix stores users sentiment (rating) toward the content item. The point is to have some empty cells because your recommender system will attempt to predict what the user would put in those if they rated the corresponding items.
 
-Sparsity problem: most users only buy one or a few items, so most of the cells are blank. The challenge is: how do you interpolate based on this?
+Sparsity problem: most users only buy one or a few items, so most of the cells are blank. The challenge is: how do you interpolate based on the data?
