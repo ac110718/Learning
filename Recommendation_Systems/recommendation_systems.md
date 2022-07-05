@@ -33,3 +33,5 @@ User-item matrix stores users sentiment (rating) toward the content item. The po
 Sparsity problem: most users only buy one or a few items, so most of the cells are blank. The challenge is: how do you interpolate based on the data?
 
 Algorithms that favor new items use time-decay algorithms (that have the time in the denominator to calculate a score), along with a "gravity" exponent to weight the penalty for old content.. and normal score features in the numerator.
+
+Timing / frequency / spread of events can have significant semantic meaning. Ex: if clicks are done within a short period of time, they might not mean as much as if clicks are registered over several days.
