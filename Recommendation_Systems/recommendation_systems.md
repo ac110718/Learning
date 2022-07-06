@@ -35,3 +35,7 @@ Sparsity problem: most users only buy one or a few items, so most of the cells a
 Algorithms that favor new items use time-decay algorithms (that have the time in the denominator to calculate a score), along with a "gravity" exponent to weight the penalty for old content.. and normal score features in the numerator.
 
 Timing / frequency / spread of events can have significant semantic meaning. Ex: if clicks are done within a short period of time, they might not mean as much as if clicks are registered over several days.
+
+Score is determined by weighting X # event(n) added together. Some weights can potentially be negative. Organize the data in rows so that it can be multiplied by a weight to calculate the score (via the dot product)
+
+Inverse frequency factors into equation because interactions with less popular items provide more information about the user than interactions with popular items. (term-frequency, or user specific frequency / document-frequency, or collection frequency).
