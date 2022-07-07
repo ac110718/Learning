@@ -39,3 +39,9 @@ Timing / frequency / spread of events can have significant semantic meaning. Ex:
 Score is determined by weighting X # event(n) added together. Some weights can potentially be negative. Organize the data in rows so that it can be multiplied by a weight to calculate the score (via the dot product)
 
 Inverse frequency factors into equation because interactions with less popular items provide more information about the user than interactions with popular items. (term-frequency, or user specific frequency / document-frequency, or collection frequency).
+
+## Chapter 5
+
+The goal of most recommender algorithms is to precalculate as much as possible to make real-time performance as fast as possible.
+
+Memory-based means that the recommender accesses the log data in real time, while the model based signifies that the algorithm aggregates the data beforehand to make it more responsive.
