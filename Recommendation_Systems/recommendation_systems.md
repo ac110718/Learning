@@ -45,3 +45,5 @@ Inverse frequency factors into equation because interactions with less popular i
 The goal of most recommender algorithms is to precalculate as much as possible to make real-time performance as fast as possible.
 
 Memory-based means that the recommender accesses the log data in real time, while the model based signifies that the algorithm aggregates the data beforehand to make it more responsive.
+
+Calculate recommendations based on actegories or abstractions. Remember that the abstractino or classification can't be too general because the association between categories loses its value. 
