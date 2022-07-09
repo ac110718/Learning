@@ -47,3 +47,9 @@ The goal of most recommender algorithms is to precalculate as much as possible t
 Memory-based means that the recommender accesses the log data in real time, while the model based signifies that the algorithm aggregates the data beforehand to make it more responsive.
 
 Calculate recommendations based on actegories or abstractions. Remember that the abstractino or classification can't be too general because the association between categories loses its value. 
+
+## Chapter 7
+
+Similarity between two items is 1 if same, and 0 if nothing in common. Relationship between similarity and distance: When distance gets larger, the similarity goes toward zero. When distance goes toward zero, the similarity goes toward one.
+
+Jaccard distance: How close are two sets to each other. Define two movies by looking at the two sets of users. Can look at # users that bought both items / # users who bought either i or j.
