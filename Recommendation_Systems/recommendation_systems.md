@@ -53,3 +53,8 @@ Calculate recommendations based on actegories or abstractions. Remember that the
 Similarity between two items is 1 if same, and 0 if nothing in common. Relationship between similarity and distance: When distance gets larger, the similarity goes toward zero. When distance goes toward zero, the similarity goes toward one.
 
 Jaccard distance: How close are two sets to each other. Define two movies by looking at the two sets of users. Can look at # users that bought both items / # users who bought either i or j.
+
+Measures of similarity
+- L1 norm: Manhattan distance. How far apart are you on ratings on multidimensions
+- L2 norm: Euclidean distance
+- Cosine similarity: Dot product, divided by scaling of each factor squared. How far apart is angle X magnitude.
