@@ -58,3 +58,5 @@ Measures of similarity
 - L1 norm: Manhattan distance. How far apart are you on ratings on multidimensions
 - L2 norm: Euclidean distance
 - Cosine similarity: Dot product, divided by scaling of each factor squared. How far apart is angle X magnitude.
+
+Use k-means clustering to segment users into different profiles. Within these subgroups you can look up the cluster, and then calculate similarities between those users as part of a smaller group. There's some risk the most similar users aren't in this group, but it's a very fast and usually accurate way to narrow down the SEARCH SPACE in calculating recommendations.
