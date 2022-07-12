@@ -60,3 +60,7 @@ Measures of similarity
 - Cosine similarity: Dot product, divided by scaling of each factor squared. How far apart is angle X magnitude.
 
 Use k-means clustering to segment users into different profiles. Within these subgroups you can look up the cluster, and then calculate similarities between those users as part of a smaller group. There's some risk the most similar users aren't in this group, but it's a very fast and usually accurate way to narrow down the SEARCH SPACE in calculating recommendations.
+
+## Chapter 8
+
+Collaborative filtering recommends a list of items for you. The list is created based on people who like the same things as you, but who also like soemthing that you haven't yet consumed. Together, we'll better understand each other.
