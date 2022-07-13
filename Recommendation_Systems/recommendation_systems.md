@@ -64,3 +64,5 @@ Use k-means clustering to segment users into different profiles. Within these su
 ## Chapter 8
 
 Collaborative filtering recommends a list of items for you. The list is created based on people who like the same things as you, but who also like soemthing that you haven't yet consumed. Together, we'll better understand each other.
+
+What you want to calculate are predictions for each of the empty cells in this matrix - numbers that correspond to a particular user's predicted future sentiment toward specific content - using the data already present in the matrix.
