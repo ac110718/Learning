@@ -351,3 +351,72 @@ FROM actor a
     INNER JOIN film f
     ON fa.film_id = f.film_id;
 
+
+
+COHORT ANALYSIS
+https://hevodata.com/learn/cohort-analysis-sql-2/
+
+Extract the first week of login for each user to determine cohort. Use the MIN function and GROUP BY 
+
+SELECT 
+  user_id, 
+  min(DATEPART(week, login_date)) AS first 
+FROM login 
+GROUP BY user_id;
+
+Calculate the relative login week number referencing two inner joins.. 
+one with login week and one with first week (per above) to calculate the subtraction
+
+SELECT
+  m.user_id,
+  m.login_week, (absolute)
+  n.first as first,
+  m.login_week - first as week_number (relative)
+FROM
+  (SELECT
+    user_id,
+    DATEPART(week, login_date) as login_week
+  FROM login
+  GROUP BY user_id, DATEPART(week, login_date)) m,
+  (SELECT
+    user_id,
+    min (DATEPART(week, login_date)) AS first
+  FROM login
+  GROUP BY user_id) n
+WHERE 
+  m.user_id = n.user_id;
+
+This will give table of all logins, with absolute and relative columns for login times, along with first login
+
+To tabulate by cohort...
+
+SELECT
+  first,
+  SUM(CASE WHEN week_number = 0 THEN 1 ELSE 0 END) AS week_0,
+  SUM(CASE WHEN week_number = 1 THEN 1 ELSE 0 END) AS week_1,
+  SUM(CASE WHEN week_number = 2 THEN 1 ELSE 0 END) AS week_2,
+  SUM(CASE WHEN week_number = 3 THEN 1 ELSE 0 END) AS week_3,
+  SUM(CASE WHEN week_number = 4 THEN 1 ELSE 0 END) AS week_4,
+  SUM(CASE WHEN week_number = 5 THEN 1 ELSE 0 END) AS week_5,
+FROM
+  (SELECT 
+    m.user_id, 
+    m.login_week,
+    n.first as first,
+    m.login_week - first as week_number
+  FROM (
+    SELECT
+      user_id,
+      DATEPART(week, login_date) as login_week
+    FROM
+      login
+    GROUP BY user_id, DATEPART(week, login_date)) m,
+    SELECT
+      user_id,
+      min(DATEPART(week, login_date)) AS first
+    FROM
+      login
+    GROUP BY user_id n
+    WHERE m.user_id = n.user_id as with_week_number
+GROUP BY first
+ORDER BY first;
