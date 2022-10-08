@@ -1,3 +1,7 @@
+// iterate through list, putting numbers into hashmap
+// along the way, first check for existence of complement
+// in which case, immediately return with answer
+
 class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
