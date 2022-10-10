@@ -8,6 +8,15 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+
+// Initialize new ListNode as result
+// Initialize a pointer to "thread" the next parameters of result
+// If List1.val < List2.val, then direct pointer to smallest val
+// iterate and progress to next element. Vice versa if List2.val < List1.val
+// iterate and progress builder pointer
+// If List1 or List2 has leftover elements, tack onto end
+// return result List
+
 class Solution {
 public:
     ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
