@@ -1,3 +1,9 @@
+// map all characters of first word along with count++ for each instance
+// for second word, decrement count of corresponding character
+// Iterate through map. If any count is not zero, immediately return false
+// (too many or too few). Else return true.
+
+
 class Solution {
 public:
     bool isAnagram(string s, string t) {
