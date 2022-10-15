@@ -1,3 +1,10 @@
+// optimal search of SORTED set
+// compare at middle so you can take out half ever iteration
+// if mid is too big, move right ptr lower
+// if mid is too small, move left ptr higher
+// return either mid == search element, or false (-1)
+
+
 class Solution {
 public:
     int search(vector<int>& nums, int target) {
