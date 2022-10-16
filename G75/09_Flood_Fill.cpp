@@ -1,3 +1,14 @@
+// If color already same as target, return original image
+// Grab continuity target (original cell color) and place into target variable
+// Change the color of the pointed cell
+// Prepare a "shift" array to iterate through
+// Load a processing queue starting with candidates to change color
+// for each "shift" candidate (up, down, left, right)....
+// Update the x and y coordinate according to which of four pairs you're on
+// Test boundary conditions + continuity color condition of updated "neighbor" cell
+// Change the color.. Add another processing cell to the queue
+// When no more to fill (i.e. boundaries extinguished).. return image
+
 class Solution {
 public:
     vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
