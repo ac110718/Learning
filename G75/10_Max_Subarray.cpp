@@ -1,3 +1,8 @@
+// Find max continuous subarray of numbers
+// Two cases: Better off starting over (nums[i]), or continuing while including element (even if negative) ?
+// While you're at least still in the positive on cumulative.. you would choose to take cum (max_local) + current element
+// If you start over, max_local turns to nums[i].. but store max of local candidates in max_global variable
+
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
