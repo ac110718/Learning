@@ -1,3 +1,9 @@
+// Lowest Common Ancestor in Binary Tree
+// is also by definition the middle node that is both bigger than smaller node, and smaller than larger node
+// If both big and small node are smaller.. continue the search on left
+// If both big and small node are bigger.. continue the search on the right
+// ...until "in the middle" condition is met, then return root
+
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
