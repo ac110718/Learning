@@ -1,3 +1,8 @@
+// balanced tree has same number of children on right as left
+// counter function to return length of branch depth (1 + max (either left or right depth)), recursively
+// fast exit if different heights on either side
+// return true, only if BOTH left and right branches are balanced.
+
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
