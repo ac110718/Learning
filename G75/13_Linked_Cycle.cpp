@@ -1,3 +1,11 @@
+// create two pointers linking to head
+// one that will go twice as fast as slow
+// push fast (and fast->next) until nullptr
+// if there's a cycle.. fast will keep looping..
+// but iterate on slow as well.. 
+// there will be intersection of fast and slow if there's a cycle
+// if fast reaches end without intersecting with slow, there is no cycle
+
 /**
  * Definition for singly-linked list.
  * struct ListNode {
