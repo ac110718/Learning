@@ -1,5 +1,6 @@
 // The API isBadVersion is defined for you.
 // bool isBadVersion(int version);
+// use binary search to find the first change in cumulative series
 
 class Solution {
 public:
