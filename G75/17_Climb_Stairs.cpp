@@ -1,3 +1,9 @@
+// for each path.. how many previous paths would get you there?
+// one step prior.. and two steps prior
+// load in base cases 0 steps and 1 step.. there is one path for each
+// iterate through DP table, populating from bottoms up
+// return dp[n] solution
+
 class Solution {
 public:
     int climbStairs(int n) {
