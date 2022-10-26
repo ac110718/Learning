@@ -1,3 +1,8 @@
+// add all character frequencies into map
+// if even number of characters, can go into palindrome
+// therefore, add freq to result (length counter)
+// if odd, add lowest "even" number of characters (i.e. freq - 1) for palindrome
+
 class Solution {
 public:
     int longestPalindrome(string s) {
