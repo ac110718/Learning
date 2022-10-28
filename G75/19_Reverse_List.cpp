@@ -1,3 +1,13 @@
+// Create three pointers: "in front" "in back" and "iterator"
+// Thread curr (iterator) to head
+// before hitting the end...
+// set next to "front" (curr->next), 
+// reverse curr's next pointer to point "back"
+// push prev pointer forward (to curr)
+// push curr (iterator) pointer to "front" (next)
+// don't get confused by label of "next" pointer and curr->next (as structural property of curr)
+// one is to orient direction.. and the other is a property of curr
+
 /**
  * Definition for singly-linked list.
  * struct ListNode {
