@@ -1,3 +1,8 @@
+// hold two variables: candidate and frequency of appearance
+// when frequency is zero (either beginning.. or overwhelmed by # of other elements)
+// then update to a new candidate
+// majority element will appear with frequency greater than other non-candidate elements
+
 class Solution {
 public:
     int majorityElement(vector<int>& nums) {
