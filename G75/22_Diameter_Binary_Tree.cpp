@@ -9,6 +9,10 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
+// Characterize the tree according to its left and right branches
+// Your defining characteristic is the max of the left or the right
+// What characteristic can you define using both the left and right branch (your own diameter = right + left branch depth)
 class Solution {
 public:
     int diameterOfBinaryTree(TreeNode* root) {
