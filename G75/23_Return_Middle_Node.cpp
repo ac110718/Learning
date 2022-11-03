@@ -1,3 +1,9 @@
+// to return middle node of LL
+// have fast and slow pointer (2x speed)
+// by time fast reaches end, slow will be middle
+// return slow
+
+
 /**
  * Definition for singly-linked list.
  * struct ListNode {
