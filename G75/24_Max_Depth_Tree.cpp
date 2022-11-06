@@ -1,3 +1,5 @@
+// depth of tree is one + the longest depth of either the right or left branch
+
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
