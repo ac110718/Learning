@@ -1,3 +1,10 @@
+// Three phases...
+// While no overlap with interval end.. push to results
+// While overlap.. take min of start, max of end to define new interval.. push to results
+// While no overlap with interval beginning.. push to results
+// Return list of interval results
+
+
 class Solution {
 public:
     vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
