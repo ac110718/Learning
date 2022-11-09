@@ -1,12 +1,9 @@
-
-
-
 WITH c_table AS
 (SELECT 
   r.customer_id, 
   c.cohort,
   count(r.rental_id) AS num_rentals,
-  TIMESTAMPDIFF(MONTH, c.first, r.rental_date) AS month_number
+  DATE_FORMAT(rental_date,'%m-%Y') AS rental_month
 FROM rental r
   LEFT JOIN
     (SELECT 
@@ -17,25 +14,21 @@ FROM rental r
     FROM rental 
     GROUP BY customer_id) c
   ON r.customer_id = c.customer_id
-GROUP BY customer_id, month_number)
+GROUP BY customer_id, rental_month)
 
 SELECT
   cohort,
   COUNT(DISTINCT customer_id) AS num_customers,
-  SUM(CASE WHEN month_number = 0 THEN num_rentals ELSE 0 END) AS month_0,
-  SUM(CASE WHEN month_number = 1 THEN num_rentals ELSE 0 END) AS month_1,
-  SUM(CASE WHEN month_number = 2 THEN num_rentals ELSE 0 END) AS month_2,
-  SUM(CASE WHEN month_number = 3 THEN num_rentals ELSE 0 END) AS month_3,
-  SUM(CASE WHEN month_number = 4 THEN num_rentals ELSE 0 END) AS month_4,
-  SUM(CASE WHEN month_number = 5 THEN num_rentals ELSE 0 END) AS month_5,
-  SUM(CASE WHEN month_number = 6 THEN num_rentals ELSE 0 END) AS month_6,
-  SUM(CASE WHEN month_number = 7 THEN num_rentals ELSE 0 END) AS month_7,
-  SUM(CASE WHEN month_number = 8 THEN num_rentals ELSE 0 END) AS month_8,
-  SUM(CASE WHEN month_number = 9 THEN num_rentals ELSE 0 END) AS month_9
+  SUM(CASE WHEN rental_month = '05-2005' THEN num_rentals ELSE 0 END) AS '05-2005',
+  SUM(CASE WHEN rental_month = '06-2005' THEN num_rentals ELSE 0 END) AS '06-2005',
+  SUM(CASE WHEN rental_month = '07-2005' THEN num_rentals ELSE 0 END) AS '07-2005',
+  SUM(CASE WHEN rental_month = '08-2005' THEN num_rentals ELSE 0 END) AS '08-2005',
+  SUM(CASE WHEN rental_month = '09-2005' THEN num_rentals ELSE 0 END) AS '09-2005',
+  SUM(CASE WHEN rental_month = '10-2005' THEN num_rentals ELSE 0 END) AS '10-2005',
+  SUM(CASE WHEN rental_month = '11-2005' THEN num_rentals ELSE 0 END) AS '11-2005',
+  SUM(CASE WHEN rental_month = '12-2005' THEN num_rentals ELSE 0 END) AS '12-2005',
+  SUM(CASE WHEN rental_month = '01-2006' THEN num_rentals ELSE 0 END) AS '01-2006',
+  SUM(CASE WHEN rental_month = '02-2006' THEN num_rentals ELSE 0 END) AS '02-2006'
 FROM c_table
 GROUP BY cohort
 ORDER BY cohort;
-
-
-
-
