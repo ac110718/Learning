@@ -1,3 +1,14 @@
+// find matrix of distance to nearest zero
+// load up answer matrix starting with zero data points (base case)
+// load up a processing queue of coordinates, starting with zeros
+// for each neighboring cell, if value is > than origin cell (distance)
+// ...then add one to the distance from next most adjacent cell
+// result will be "inner-most" cells will have biggest distance
+// value > origin cell limits to just one time addition
+// bound iterations by edge of matrix conditions
+
+
+
 class Solution {
 public:
     vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
