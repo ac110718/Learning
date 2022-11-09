@@ -32,3 +32,51 @@ SELECT
 FROM c_table
 GROUP BY cohort
 ORDER BY cohort;
+
+
+**********
+
+WITH c_table AS
+(
+  WITH f AS
+  (SELECT
+    customer_id,
+    min(payment_date) AS first
+  FROM payment
+  GROUP BY customer_id)
+
+  SELECT
+    p.customer_id,
+    DATE_FORMAT(f.first, '%m-%Y') AS cohort,
+    DATE_FORMAT(p.payment_date, '%m-%Y') AS pay_month,
+    SUM(p.amount) AS revenue,
+    COUNT(p.rental_id) AS rentals,
+    SUM(p.amount)/COUNT(p.rental_id) AS avg_price
+  FROM
+    payment p 
+    LEFT JOIN f
+    ON p.customer_id = f.customer_id
+  GROUP BY
+    p.customer_id,
+    pay_month
+)
+
+SELECT
+  cohort,
+  COUNT(DISTINCT customer_id),
+  SUM(CASE WHEN pay_month = '05-2005' THEN revenue ELSE 0 END) AS '05-2005',
+  SUM(CASE WHEN pay_month = '06-2005' THEN revenue ELSE 0 END) AS '06-2005',
+  SUM(CASE WHEN pay_month = '07-2005' THEN revenue ELSE 0 END) AS '07-2005',
+  SUM(CASE WHEN pay_month = '08-2005' THEN revenue ELSE 0 END) AS '08-2005',
+  SUM(CASE WHEN pay_month = '09-2005' THEN revenue ELSE 0 END) AS '09-2005',
+  SUM(CASE WHEN pay_month = '10-2005' THEN revenue ELSE 0 END) AS '10-2005',
+  SUM(CASE WHEN pay_month = '11-2005' THEN revenue ELSE 0 END) AS '11-2005',
+  SUM(CASE WHEN pay_month = '12-2005' THEN revenue ELSE 0 END) AS '12-2005',
+  SUM(CASE WHEN pay_month = '01-2006' THEN revenue ELSE 0 END) AS '01-2006',
+  SUM(CASE WHEN pay_month = '02-2006' THEN revenue ELSE 0 END) AS '02-2006'
+FROM c_table
+GROUP BY cohort
+ORDER BY cohort;
+
+
+
