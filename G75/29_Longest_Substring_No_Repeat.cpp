@@ -1,3 +1,9 @@
+// keep pointer to starting position, max length
+// map to remember what characters you've seen
+// if seen character.. start at last time you saw character (+1), or later (prev start point)
+// in map, update latest position of char to current position
+// update max length to be curr position - safe start + 1
+
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
