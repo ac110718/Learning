@@ -1,3 +1,10 @@
+// three numbers that add up to zero
+// sort the numbers for optimal iteration
+// curr pointer (i), start, end pointer
+// push to results when i + start + end = 0
+// accelerate forward and backwards when it's the same number
+// push start forward if number is too small < 0, or end backwards if too big > 0
+
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
