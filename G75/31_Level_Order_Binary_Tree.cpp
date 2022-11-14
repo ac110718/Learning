@@ -1,3 +1,10 @@
+// for each level, push current node into processing queue
+// Get processing size (level size) by looking at size of queue
+// for each node in queue, place left and right node into the queue
+// But you will stop the loop after (level size) iterations
+// Because you took stock of the queue size as first step in loop
+
+
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
