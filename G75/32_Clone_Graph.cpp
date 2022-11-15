@@ -19,6 +19,15 @@ public:
 };
 */
 
+
+// These nodes have both a value and a list of neighbors
+// keep a map, mapping out node to node-clone
+// keep queue for processing nodes
+// For each node queue.. look at each neighbor..
+// if neighbor isn't there.. add it to the map, as well as the queue
+// add neighbor to list of neighbors for the cloned node (map[current])
+// return cloned node.. map[node]
+
 class Solution {
 public:
     Node* cloneGraph(Node* node) {
