@@ -1,3 +1,12 @@
+// if token is a digit (check last char with isdigit
+// push token to stack with stoi
+// else.. it's an operator
+// first, grab the top two numbers from the stack and pop them
+// then you have the operator (current tokens[i])
+// operate on the two numbers and push it back to the stack
+// return top of stack which will be answer.
+
+
 class Solution {
 public:
     int evalRPN(vector<string>& tokens) {
