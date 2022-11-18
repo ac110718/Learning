@@ -1,3 +1,15 @@
+// Use a Topological sort to trace dependencies
+// Two maps.. one to store # incoming edges and one to store actual edge nodes
+// increment number of incoming edges to extent you find more dependencies
+// add these to list of outgoing edges
+// start with zero dependency nodes.. and load into processing queue
+// keep track of visited nodes
+// for each edge processed, decrement number of dependencies
+// when you hit zero.. add to processing queue
+// this will process by order of least dependencies and
+// only triggered when you've fulfilled all prerequisites
+
+
 class Solution {
 public:
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
