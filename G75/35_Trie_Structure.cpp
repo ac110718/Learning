@@ -1,3 +1,11 @@
+// each TrieNode will have 26 potential branches for each letter
+// keep bool parameter to denote end
+// to insert.. for each character.. if no TrieNode exists, make one
+// and point child to child[j] char
+// after reaching end.. mark leaf as end
+// to search.. trace through char leaf nodes and check bool for end
+// to start with search, trace and then ensure last node is not nullptr
+
 class Trie {
 private:
     struct TrieNode {
