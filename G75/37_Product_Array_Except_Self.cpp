@@ -1,3 +1,11 @@
+// To get product of all nums except self...
+// You want cumulative product of all numbers on "either" side
+// Leftmost = cum product of rightside. Rightmost = cum product of leftside
+// middle = cum product of rightside x cum product leftside
+// keep track of two arrays.. left buildup.. and right buildup moving in opposite directions
+// multiply together while keeping ith placeholder = 1
+// result[0] = 1 x right cum product.. result[size] = left cum product x 1
+
 class Solution {
 public:
     vector<int> productExceptSelf(vector<int>& nums) {
