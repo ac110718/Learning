@@ -9,6 +9,15 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
+
+// re-parameterize in context of lower bound and upper bound
+// node must be less than high and higher than low
+// if not, immediate exit
+// else, return BOTH validBST left + validBST right...
+// ... but with root as the new "high" and "low" parameter, respectively
+// to ensure BST condition is true
+
 class Solution {
 public:
     bool isValidBST(TreeNode* root) {
