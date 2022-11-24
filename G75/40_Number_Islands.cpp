@@ -1,3 +1,8 @@
+// to count islands, count the first immediate 1
+// then zero out the rest of the island to eliminate double counting
+// zero out by setting all adjacent cells to zero
+// if already zero (or boundary), immediately return
+
 class Solution {
 public:
     int numIslands(vector<vector<char>>& grid) {
