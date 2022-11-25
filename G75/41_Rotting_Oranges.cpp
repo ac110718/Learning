@@ -1,3 +1,11 @@
+// track # fresh oranges, minutes for timing round, and rotten orange coords
+// process all rotten oranges, keep track of new infections
+// explore adjacent neighbors. If fresh, add to infected list
+// when done processing rotten, update with newly infected list. 
+// Update minutes, reduce fresh oranges
+// keep while loop rotten.size() > 0 to keep running
+// if no more fresh oranges, return answer, else no answer possible
+
 class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
