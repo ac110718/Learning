@@ -1,3 +1,6 @@
+// check if either side has been "rotated"
+// adjust the midpoint accordingly
+
 class Solution {
 public:
     int search(vector<int>& nums, int target) {
