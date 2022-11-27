@@ -1,3 +1,9 @@
+// to explore permutations
+// have a target (that subtracts element included)
+// on next iteration, progress start index to exclude that particular element
+// add potential results to interim candidate list (combo)
+// when target is fully achieved, then add to final results.
+
 class Solution {
 public:
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
