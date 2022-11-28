@@ -1,3 +1,7 @@
+// only add to answers when full size is achieved
+// place desired element at start index
+// but also progress the start index on each iteration
+
 class Solution {
 public:
     vector<vector<int>> permute(vector<int>& nums) {
