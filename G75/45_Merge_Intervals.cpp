@@ -1,3 +1,7 @@
+// comparison is always between ending and current start time
+// if overlap, update y to be max of end time
+// if no overlap.. push back the current pair into the results
+
 class Solution {
 public:
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
