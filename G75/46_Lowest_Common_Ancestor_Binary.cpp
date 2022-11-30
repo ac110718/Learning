@@ -1,3 +1,8 @@
+// LCA is that which has non-null values for both the left and the right in terms of being "found"
+// base case is either nullptr or being exact value of either p or q value
+// search both the left and the right. If you're at a split, that's the LCA (return root)
+// else, choose one of the two branched LCAs
+
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
