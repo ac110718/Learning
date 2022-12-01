@@ -1,3 +1,8 @@
+// do binary search on timestamp
+// such that timestamp does not exceed potential index
+// if exact match or n+1 exceeds timestamp
+// return the associated value
+
 class TimeMap {
 unordered_map<string, pair<vector<string>, vector<int>>> ht;
 public:
