@@ -1,3 +1,9 @@
+// keep a map of adjacent emails to retain associations
+// for each name.. put in the first email
+// for each email.. run DFS to find adjacent emails (skipping over visited)
+// add neighboring emails to list and run DFS for the neighbor emails
+// should be eliminating visited emails as you go through
+
 class Solution {
     unordered_set<string> visited;
     unordered_map<string, vector<string>> adjacent;
