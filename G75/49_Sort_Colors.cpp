@@ -1,3 +1,8 @@
+// to sort three colors, have start and end index
+// if 0, then swap (and push) start position forwards
+// if 2, then swap (and push) end position backwards
+// iterate current working index
+
 class Solution {
 public:
     void sortColors(vector<int>& nums) {
