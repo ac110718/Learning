@@ -1,3 +1,10 @@
+// Problem: Can string s be decomposed cleanly into words in wordDict
+// Input words into a set
+// Iterate through dynamic programming
+// Can a word END with that specific character?
+// Check all possibilities from j=0 through j < i (any possible start, but with definitive end)
+// return true or false for last character (yes, you can break it up or not)
+
 class Solution {
 public:
     bool wordBreak(string s, vector<string>& wordDict) {
