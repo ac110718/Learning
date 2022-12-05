@@ -1,3 +1,6 @@
+// can partition into two equal subset sums
+
+
 class Solution {
 public:
     bool canPartition(vector<int>& nums) {
