@@ -1,3 +1,9 @@
+// part string into integer
+// skip blanks, turn minus into negatives
+// push each digit forward with multiple of ten 
+// plus the interim digit
+// if overflow, then cap it
+
 class Solution {
 public:
     int myAtoi(string s) {
