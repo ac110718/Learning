@@ -17,14 +17,14 @@ public:
         queue<TreeNode*> q;
         q.push(root);
         while (!q.empty()) {
-            int level_size = q.size();
-            for (int i = 0; i < level_size; i++) {
+            int level_size = q.size(); // track size of previous level depth
+            for (int i = 0; i < level_size; i++) { // bounded by previous level depth
                 TreeNode* curr = q.front();
                 if (i == level_size - 1) {
-                    result.push_back(curr->val);
+                    result.push_back(curr->val); // push back the very last element within the level
                 }
-                q.pop();
-                if (curr->left != nullptr) q.push(curr->left);
+                q.pop(); // eject all elements in level
+                if (curr->left != nullptr) q.push(curr->left); // inject all children back into processing queue for next iteration
                 if (curr->right != nullptr) q.push(curr->right);
             }
         }
