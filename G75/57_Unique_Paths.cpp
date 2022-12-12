@@ -1,3 +1,8 @@
+// you have m x n sized map
+// how many different paths can you take to reach bottom right corner from top left
+// recursive solution (options from top + options from left)
+// so use DP to populate answers bottoms up
+
 class Solution {
 public:
     int uniquePaths(int m, int n) {
